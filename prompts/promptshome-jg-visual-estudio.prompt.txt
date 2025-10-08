@@ -1,0 +1,81 @@
+Quiero que generes la página principal (Home) completa para el sitio web **JG Visual Estudio**, 
+dirigido por el Arq. Juan Granato, en Next.js 15 + Tailwind CSS.
+
+🎯 Objetivo:
+Crear una web profesional, minimalista y visualmente impactante 
+que refleje el nivel de estudios como Render3R y Foster + Partners.
+
+📂 Ubicación del archivo:
+src/app/page.tsx
+
+📸 Archivos disponibles en /public/images/:
+- /logos/logo-jg.webp (logo)
+- /team/juan-granato.webp (foto del arquitecto)
+- /proyectos/*.webp (renders y proyectos)
+- /estudio/hero-video.mp4 o imagen hero alternativa
+
+⚙️ Estructura de la página:
+1️⃣ Hero principal:
+   - Fondo con video (images/estudio/hero-video.mp4) o imagen (images/proyectos/CAFETERIA-CHILIN-FRENTE.webp)
+   - Overlay degradado oscuro translúcido.
+   - Texto: “Diseñamos y visualizamos arquitectura que se vive.”
+   - Subtexto: “Renders, diseño y regularización de obra en Rosario y Funes.”
+   - Botones:
+     - “Ver proyectos” → scroll a sección de proyectos
+     - “Solicitar presupuesto” → /contacto
+     - “Consultar por WhatsApp” → wa.me/543415799316
+   - Efecto de movimiento sutil (fade-in + parallax).
+
+2️⃣ Servicios:
+   - 3 tarjetas con íconos (usa Heroicons).
+   - Títulos y subtítulos:
+     - “Render 3D hiperrealista” → “Imágenes que comunican ideas antes de construir.”
+     - “Diseño arquitectónico integral” → “Desde el concepto hasta el detalle constructivo.”
+     - “Regularización de obra” → “Gestión técnica y documental en Rosario y Funes.”
+   - Animaciones hover (elevación y sombra).
+
+3️⃣ Últimos proyectos:
+   - Grilla responsive con imágenes de /public/images/proyectos/
+   - Zoom suave al pasar el cursor.
+   - Cada card con nombre del proyecto y categoría (Residencial, Comercial, etc.).
+
+4️⃣ Nuestro enfoque:
+   - Fondo gris claro (#f7f7f7).
+   - Texto poético:
+     “Transformamos ideas en imágenes que inspiran, anticipan y venden proyectos antes de construirse.”
+   - Distribución: texto a izquierda, imagen lateral (images/proyectos/CASA-KAI-SOFA.webp).
+
+5️⃣ Testimonios:
+   - Tres tarjetas con citas de clientes reales o placeholder.
+   - Animaciones de entrada al hacer scroll.
+
+6️⃣ CTA final:
+   - Fondo negro, texto blanco.
+   - “¿Listo para mostrar tu proyecto como nunca antes?”
+   - Botón: “Solicitar presupuesto” → /contacto.
+
+7️⃣ Footer:
+   - Logo JG Visual Estudio.
+   - Links a redes:
+     - Instagram → instagram.com/jg_archviz
+     - Behance → behance.net/juangranato2
+   - Mail → juanignaciogranato96@hotmail.com
+   - Texto: “© 2025 JG Visual Estudio — Funes • Rosario.”
+
+8️⃣ Extras:
+   - Botón flotante de WhatsApp fijo en todas las páginas.
+   - Traducción al inglés con sistema simple (botón ES/EN).
+   - Animaciones suaves con Framer Motion o Tailwind transitions.
+   - Diseño completamente responsive.
+
+🎨 Paleta sugerida:
+   - Fondo: #ffffff
+   - Gris cálido: #f7f7f7
+   - Acento: #dfe4ea
+   - Negro carbón: #1b1b1b
+   - Tipografía sans-serif moderna (ej: Inter, Poppins o Work Sans).
+
+💡 Resultado esperado:
+Una Home elegante, minimalista, con video o imagen de fondo, 
+servicios claros, proyectos visuales, testimonios, 
+y CTA convincente — lista para producción profesional.
