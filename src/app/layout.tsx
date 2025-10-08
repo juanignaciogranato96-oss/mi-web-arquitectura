@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { defaultLocale, getDictionary, isLocale } from "@/i18n/dictionaries";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,26 +15,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: getDictionary(defaultLocale).metadata.title,
-  description: getDictionary(defaultLocale).metadata.description,
+  title: "J.G. Diseño y Visualización Arquitectónica",
+  description:
+    "Estudio dedicado a arquitectura, renders y regularización de obra en Rosario y Funes.",
 };
 
 export default function RootLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale?: string };
 }>) {
-  const locale =
-    params?.locale && isLocale(params.locale) ? params.locale : defaultLocale;
-
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang="es">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-neutral-50 text-neutral-900`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-neutral-100 text-neutral-900 antialiased`}
       >
-        {children}
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
