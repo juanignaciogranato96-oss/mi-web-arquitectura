@@ -1,582 +1,515 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   CubeTransparentIcon,
   BuildingOffice2Icon,
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/24/outline";
+import { Header, type LanguageCode } from "@/components/Header";
 
-type Language = "es" | "en";
+const SERVICES_ICONS = [
+  CubeTransparentIcon,
+  BuildingOffice2Icon,
+  ClipboardDocumentCheckIcon,
+] as const;
 
-const LANGUAGES: Language[] = ["es", "en"];
+type ProjectCategory = "commercial" | "residential";
 
-const PROJECTS = [
+type ProjectItem = {
+  image: string;
+  category: ProjectCategory;
+  labels: Record<LanguageCode, { name: string }>;
+};
+
+const PROJECTS: ProjectItem[] = [
+  {
+    image: "/images/proyectos/proyecto-3.webp",
+    category: "commercial",
+    labels: {
+      es: { name: "Cafe Chilin" },
+      en: { name: "Chilin Cafe" },
+    },
+  },
   {
     image: "/images/proyectos/proyecto-1.webp",
-    name: {
-      es: "Casa Horizonte",
-      en: "Horizonte Residence",
-    },
-    category: {
-      es: "Residencial",
-      en: "Residential",
+    category: "residential",
+    labels: {
+      es: { name: "Casa Hormigon" },
+      en: { name: "Concrete House" },
     },
   },
   {
     image: "/images/proyectos/proyecto-2.webp",
-    name: {
-      es: "Faro Urbano",
-      en: "Urban Lighthouse",
-    },
-    category: {
-      es: "Multifamiliar",
-      en: "Multi-family",
-    },
-  },
-  {
-    image: "/images/proyectos/proyecto-3.webp",
-    name: {
-      es: "Café Chilin",
-      en: "Chilin Café",
-    },
-    category: {
-      es: "Comercial",
-      en: "Commercial",
+    category: "residential",
+    labels: {
+      es: { name: "Cocina Casa Teros" },
+      en: { name: "Teros House Kitchen" },
     },
   },
   {
     image: "/images/proyectos/proyecto-4.webp",
-    name: {
-      es: "Oficinas Nexus",
-      en: "Nexus Offices",
-    },
-    category: {
-      es: "Corporativo",
-      en: "Corporate",
+    category: "residential",
+    labels: {
+      es: { name: "Departamento Nexus" },
+      en: { name: "Nexus Apartment" },
     },
   },
   {
     image: "/images/proyectos/proyecto-5.webp",
-    name: {
-      es: "Casa Kai",
-      en: "Kai House",
-    },
-    category: {
-      es: "Residencial",
-      en: "Residential",
+    category: "residential",
+    labels: {
+      es: { name: "Casa Kai" },
+      en: { name: "Kai House" },
     },
   },
   {
     image: "/images/proyectos/proyecto-6.webp",
-    name: {
-      es: "Galería Delta",
-      en: "Delta Gallery",
-    },
-    category: {
-      es: "Cultural",
-      en: "Cultural",
+    category: "commercial",
+    labels: {
+      es: { name: "Local Glam" },
+      en: { name: "Glam Retail" },
     },
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote: {
-      es: "“El nivel de detalle en los renders de Juan adelanta decisiones clave y eleva cada presentación con nuestros inversores.”",
-      en: "“Juan’s renderings anticipate key decisions and elevate every presentation we make to investors.”",
-    },
-    author: "Arq. Sofía Méndez",
-    role: {
-      es: "Directora en Estudio Habitat",
-      en: "Director at Estudio Habitat",
-    },
+const CATEGORY_BADGES: Record<
+  ProjectCategory,
+  { color: string; labels: Record<LanguageCode, string> }
+> = {
+  commercial: {
+    color: "#EAC64D",
+    labels: { es: "Comercial", en: "Commercial" },
   },
-  {
-    quote: {
-      es: "“Su proceso colaborativo nos permitió validar el diseño integral antes de licitar la obra.”",
-      en: "“His collaborative process let us validate the entire design before tendering the project.”",
-    },
-    author: "Ing. Nicolás Raffo",
-    role: {
-      es: "Gerente de Proyectos, Constructora RFX",
-      en: "Project Manager, RFX Construction",
-    },
+  residential: {
+    color: "#9DBA8F",
+    labels: { es: "Residencial", en: "Residential" },
   },
-  {
-    quote: {
-      es: "“Cumple plazos exigentes sin resignar precisión. Es nuestro aliado para regularizaciones en Rosario y Funes.”",
-      en: "“He meets demanding timelines without sacrificing precision. He’s our partner for permitting across Rosario and Funes.”",
-    },
-    author: "Dra. Valentina Cano",
-    role: {
-      es: "Desarrolladora Inmobiliaria",
-      en: "Real Estate Developer",
-    },
-  },
-];
+};
 
-const COPY: Record<Language, {
-  hero: {
-    title: string;
-    subtitle: string;
-    badge: string;
-    buttons: {
-      projects: string;
-      quote: string;
-      whatsapp: string;
-    };
-  };
-  services: {
-    title: string;
-    description: string;
-    items: Array<{ title: string; description: string }>;
-  };
-  projects: {
-    title: string;
-    description: string;
-  };
-  approach: {
-    title: string;
-    heading: string;
-    quote: string;
-    signature: string;
-    role: string;
-    imageAlt: string;
-  };
-  testimonials: {
-    title: string;
-  };
-  cta: {
-    title: string;
-    button: string;
-  };
-  languageLabel: string;
-}> = {
+const COPY: Record<
+  LanguageCode,
+  {
+    hero: { title: string; subtitle: string };
+    services: { title: string; subtitle: string; items: string[]; descriptions: string[] };
+    projects: { title: string; subtitle: string; overlay: string };
+    approach: { title: string; heading: string; quote: string; author: string; role: string };
+    testimonials: { title: string; subtitle: string };
+    testimonialsContent: Array<{ quote: string; author: string; role: string }>;
+    cta: { title: string; button: string };
+  }
+> = {
   es: {
     hero: {
-      title: "Diseñamos y visualizamos arquitectura que se vive.",
-      subtitle: "Renders, diseño y regularización de obra en Rosario y Funes.",
-      badge: "JG Visual Estudio · Dirigido por el Arq. Juan Granato",
-      buttons: {
-        projects: "Ver proyectos",
-        quote: "Solicitar presupuesto",
-        whatsapp: "Consultar por WhatsApp",
-      },
+      title: "Disenamos y visualizamos arquitectura que se vive.",
+      subtitle: "Renders, diseno y regularizacion de obra en Rosario y Funes.",
     },
     services: {
       title: "Servicios",
-      description:
-        "Combinamos visión arquitectónica, tecnología y documentación precisa para potenciar cada etapa del proyecto.",
+      subtitle:
+        "Acompanamos cada etapa del proyecto con visualizaciones hiperrealistas, diseno integral y gestion documental.",
       items: [
-        {
-          title: "Render 3D hiperrealista",
-          description: "Imágenes que comunican ideas antes de construir.",
-        },
-        {
-          title: "Diseño arquitectónico integral",
-          description: "Desde el concepto hasta el detalle constructivo.",
-        },
-        {
-          title: "Regularización de obra",
-          description: "Gestión técnica y documental en Rosario y Funes.",
-        },
+        "Render 3D hiperrealista",
+        "Diseno arquitectonico integral",
+        "Regularizacion de obra",
+      ],
+      descriptions: [
+        "Imagenes que comunican ideas antes de construir y potencian ventas.",
+        "Concepto, desarrollo y detalle constructivo alineado a objetivos del cliente.",
+        "Gestion tecnica y documental en Rosario y Funes con seguimiento cercano.",
       ],
     },
     projects: {
-      title: "Últimos proyectos",
-      description:
-        "Visuales que elevan presentaciones comerciales, concursos y aprobaciones municipales.",
+      title: "Ultimos proyectos",
+      subtitle:
+        "Visuales que destacan la esencia material, la luz y el habitar de cada espacio.",
+      overlay: "Ver proyecto",
     },
     approach: {
       title: "Nuestro enfoque",
       heading:
-        "Transformamos ideas en imágenes que inspiran, anticipan y venden proyectos antes de construirse.",
+        "Transformamos ideas en imagenes que inspiran, anticipan y venden proyectos antes de construirse.",
       quote:
-        "La visualización arquitectónica es una herramienta estratégica: muestra la esencia del proyecto y acelera decisiones clave.",
-      signature: "Arq. Juan Granato",
+        "Cada render es una herramienta estrategica que alinea vision, inversion y aprobaciones clave.",
+      author: "Arq. Juan Granato",
       role: "Director de JG Visual Estudio",
-      imageAlt: "Render interior del proyecto Casa Kai",
     },
     testimonials: {
       title: "Testimonios",
+      subtitle: "Estudios, desarrolladoras y constructoras confian en nuestro proceso.",
     },
+    testimonialsContent: [
+      {
+        quote:
+          "El nivel de detalle en los renders nos permite resolver decisiones antes de obra y elevar las presentaciones con inversores.",
+        author: "Arq. Sofia Mendez",
+        role: "Estudio Habitat",
+      },
+      {
+        quote:
+          "La metodologia colaborativa asegura consistencia desde el concepto hasta la documentacion final.",
+        author: "Ing. Nicolas Raffo",
+        role: "Constructora RFX",
+      },
+      {
+        quote:
+          "Cumple plazos exigentes sin resignar precision y es nuestro aliado para regularizaciones en Rosario y Funes.",
+        author: "Dra. Valentina Cano",
+        role: "Desarrolladora inmobiliaria",
+      },
+    ],
     cta: {
-      title: "¿Listo para mostrar tu proyecto como nunca antes?",
+      title: "Listo para mostrar tu proyecto como nunca antes?",
       button: "Solicitar presupuesto",
     },
-    languageLabel: "Idioma",
   },
   en: {
     hero: {
       title: "We design and visualize architecture you can feel.",
-      subtitle: "Renderings, design and permitting for Rosario and Funes.",
-      badge: "JG Visual Studio · Led by Arch. Juan Granato",
-      buttons: {
-        projects: "View projects",
-        quote: "Request a quote",
-        whatsapp: "Chat on WhatsApp",
-      },
+      subtitle: "Renderings, design and permitting services for Rosario and Funes.",
     },
     services: {
       title: "Services",
-      description:
-        "We blend architectural vision, technology and precise documentation to empower every project phase.",
+      subtitle:
+        "We support every project phase with hyper-realistic visuals, integrated design and permitting expertise.",
       items: [
-        {
-          title: "Hyper-realistic 3D render",
-          description: "Imagery that communicates ideas before construction.",
-        },
-        {
-          title: "Integrated architectural design",
-          description: "From concept development to construction details.",
-        },
-        {
-          title: "Building regularization",
-          description: "Technical and paperwork management in Rosario and Funes.",
-        },
+        "Hyper-realistic 3D render",
+        "Integrated architectural design",
+        "Building regularization",
+      ],
+      descriptions: [
+        "Imagery that communicates intent before construction and accelerates sales.",
+        "Concept, development and technical detailing aligned with client goals.",
+        "Technical documentation and municipal management across Rosario and Funes.",
       ],
     },
     projects: {
       title: "Latest projects",
-      description:
-        "Visual assets that elevate sales presentations, competitions and municipal approvals.",
+      subtitle:
+        "Visual stories that highlight materiality, light and the way each space is lived.",
+      overlay: "View project",
     },
     approach: {
       title: "Our approach",
       heading:
         "We turn ideas into images that inspire, anticipate and sell projects before they are built.",
       quote:
-        "Architectural visualization is strategic: it conveys a project’s essence and accelerates informed decisions.",
-      signature: "Arch. Juan Granato",
+        "Every render is a strategic tool that aligns vision, investment and key approvals.",
+      author: "Arch. Juan Granato",
       role: "Director at JG Visual Studio",
-      imageAlt: "Interior visual of Kai House project",
     },
     testimonials: {
       title: "Testimonials",
+      subtitle: "Studios, developers and builders rely on our process.",
     },
+    testimonialsContent: [
+      {
+        quote:
+          "The level of detail in each render lets us settle decisions ahead of construction and elevates investor presentations.",
+        author: "Arch. Sofia Mendez",
+        role: "Habitat Studio",
+      },
+      {
+        quote:
+          "The collaborative workflow keeps consistency from concept through final documentation.",
+        author: "Eng. Nicolas Raffo",
+        role: "RFX Construction",
+      },
+      {
+        quote:
+          "Deadlines are met without losing precision and they are our partner for permitting in Rosario and Funes.",
+        author: "Dr. Valentina Cano",
+        role: "Real estate developer",
+      },
+    ],
     cta: {
       title: "Ready to showcase your project like never before?",
       button: "Request a quote",
     },
-    languageLabel: "Language",
   },
 };
 
+const sectionVariants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+};
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
 export default function HomePage() {
-  const [language, setLanguage] = useState<Language>("es");
-  const [isMounted, setIsMounted] = useState(false);
-  const [visibleTestimonials, setVisibleTestimonials] = useState<number[]>([]);
-  const testimonialRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [language, setLanguage] = useState<LanguageCode>("es");
+  const copy = COPY[language];
 
-  const content = useMemo(() => COPY[language], [language]);
-
-  const projects = useMemo(
-    () =>
-      PROJECTS.map((project) => ({
-        ...project,
-        translatedName: project.name[language],
-        translatedCategory: project.category[language],
-      })),
-    [language],
-  );
-
-  const testimonials = useMemo(
-    () =>
-      TESTIMONIALS.map((item) => ({
-        author: item.author,
-        quote: item.quote[language],
-        role: item.role[language],
-      })),
-    [language],
-  );
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    setVisibleTestimonials([]);
-    testimonialRefs.current = testimonialRefs.current.slice(0, testimonials.length);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Number((entry.target as HTMLElement).dataset.index);
-            setVisibleTestimonials((prev) =>
-              prev.includes(index) ? prev : [...prev, index],
-            );
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.25 },
-    );
-
-    testimonialRefs.current.forEach((ref) => {
-      if (ref) {
-        observer.observe(ref);
-      }
-    });
-
-    return () => observer.disconnect();
-  }, [testimonials]);
-
-  const handleScrollToProjects = () => {
+  const handleProjectsClick = useCallback(() => {
     const target = document.getElementById("projects");
     if (target) {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  };
+  }, []);
 
-  const whatsappUrl = "https://wa.me/543415799316";
+  const overlayLabel = copy.projects.overlay;
+
+  const services = useMemo(
+    () =>
+      copy.services.items.map((title, index) => ({
+        title,
+        description: copy.services.descriptions[index],
+        Icon: SERVICES_ICONS[index],
+      })),
+    [copy.services.descriptions, copy.services.items],
+  );
+
+  const testimonials = copy.testimonialsContent;
 
   return (
-    <div className="bg-white text-neutral-900">
-      <section className="relative min-h-[80vh] overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
-          poster="/images/proyectos/proyecto-1.webp"
-        >
-          <source src="/images/estudio/hero-video.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/65" />
+    <>
+      <Header
+        language={language}
+        onLanguageChange={setLanguage}
+        onProjectsClick={handleProjectsClick}
+      />
 
-        <div className="relative mx-auto flex min-h-[80vh] max-w-6xl flex-col justify-center px-6 py-24">
-          <div className="flex items-center justify-end">
-            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur">
-              <span className="hidden sm:inline">{content.languageLabel}</span>
-              {LANGUAGES.map((lang) => (
-                <button
-                  key={lang}
-                  type="button"
-                  onClick={() => setLanguage(lang)}
-                  className={`rounded-full px-2.5 py-1 transition ${
-                    language === lang
-                      ? "bg-white text-neutral-900"
-                      : "text-white/70 hover:text-white"
-                  }`}
-                >
-                  {lang.toUpperCase()}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div
-            className={`mt-12 max-w-3xl rounded-3xl bg-white/5 p-10 text-white shadow-2xl shadow-black/20 backdrop-blur-lg transition-all duration-700 ${
-              isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-            }`}
+      <main className="bg-white text-neutral-900">
+        <section className="relative min-h-[85vh] overflow-hidden pt-32 pb-16">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/images/proyectos/proyecto-5.webp"
+            className="absolute inset-0 h-full w-full object-cover"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70">
-              {content.hero.badge}
-            </p>
-            <h1 className="mt-4 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              {content.hero.title}
-            </h1>
-            <p className="mt-6 text-lg text-white/80 sm:text-xl">
-              {content.hero.subtitle}
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <button
-                type="button"
-                onClick={handleScrollToProjects}
-                className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-900 shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-neutral-100"
-              >
-                {content.hero.buttons.projects}
-              </button>
-              <Link
-                href="/contacto"
-                className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10"
-              >
-                {content.hero.buttons.quote}
-              </Link>
-              <Link
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-emerald-400/20 bg-emerald-500/20 px-6 py-3 text-sm font-semibold text-emerald-100 transition hover:-translate-y-0.5 hover:bg-emerald-500/30"
-              >
-                {content.hero.buttons.whatsapp}
-              </Link>
-            </div>
+            <source src="/images/estudio/hero-video.mp4" type="video/mp4" />
+          </video>
+          <div
+            className="absolute inset-0"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
+          />
+          <div className="relative mx-auto flex max-w-4xl flex-col items-center px-6 text-center text-white">
+            <motion.div
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="space-y-6"
+            >
+              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                {copy.hero.title}
+              </h1>
+              <p className="text-lg text-white/80 sm:text-xl">{copy.hero.subtitle}</p>
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section
-        id="services"
-        className="mx-auto max-w-6xl px-6 py-20 sm:py-24"
-      >
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400">
-            {content.services.title}
-          </p>
-          <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
-            {content.services.description}
-          </h2>
-        </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {content.services.items.map((item, index) => {
-            const Icon =
-              index === 0
-                ? CubeTransparentIcon
-                : index === 1
-                  ? BuildingOffice2Icon
-                  : ClipboardDocumentCheckIcon;
-            return (
-              <article
-                key={item.title}
-                className="group h-full rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm shadow-neutral-900/5 transition-transform duration-300 ease-out hover:-translate-y-2 hover:border-neutral-300 hover:shadow-2xl hover:shadow-neutral-900/10"
+        <motion.section
+          className="mx-auto max-w-6xl px-6 py-12"
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C2A85F]">
+              {copy.services.title}
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
+              {copy.services.subtitle}
+            </h2>
+          </div>
+          <motion.div
+            className="mt-8 grid gap-4 md:grid-cols-3"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {services.map(({ title, description, Icon }) => (
+              <motion.article
+                key={title}
+                variants={sectionVariants}
+                className="group h-full rounded-3xl border border-neutral-200/70 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/10"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-900 text-white transition group-hover:scale-105">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#3B806B] text-white shadow-lg shadow-[#3B806B]/30">
                   <Icon className="h-6 w-6" />
                 </div>
-                <h3 className="mt-6 text-xl font-semibold text-neutral-900">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm text-neutral-600">{item.description}</p>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section
-        id="projects"
-        className="bg-neutral-50 py-20 sm:py-24"
-      >
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400">
-              {content.projects.title}
-            </p>
-            <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
-              {content.projects.description}
-            </h2>
-          </div>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <figure
-                key={project.image}
-                className="group overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-1 hover:border-neutral-300 hover:shadow-xl hover:shadow-neutral-900/10"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.translatedName}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <figcaption className="flex items-center justify-between px-5 py-4">
-                  <div>
-                    <p className="text-sm font-semibold text-neutral-900">
-                      {project.translatedName}
-                    </p>
-                    <span className="text-xs uppercase tracking-[0.25em] text-neutral-400">
-                      {project.translatedCategory}
-                    </span>
-                  </div>
-                </figcaption>
-              </figure>
+                <h3 className="mt-6 text-xl font-semibold text-neutral-900">{title}</h3>
+                <p className="mt-3 text-sm text-neutral-600">{description}</p>
+              </motion.article>
             ))}
-          </div>
-        </div>
-      </section>
+          </motion.div>
+        </motion.section>
 
-      <section className="bg-[#f7f7f7]">
-        <div className="mx-auto flex flex-col-reverse items-center gap-10 px-6 py-20 sm:py-24 lg:max-w-6xl lg:flex-row">
-          <div className="w-full flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400">
-              {content.approach.title}
-            </p>
-            <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
-              {content.approach.heading}
-            </h2>
-            <div className="mt-8 rounded-3xl border border-neutral-300/50 bg-white/70 p-6 shadow-sm shadow-neutral-900/5 backdrop-blur">
-              <p className="text-base text-neutral-600 italic">
-                “{content.approach.quote}”
+        <motion.section
+          id="projects"
+          className="bg-[#f5f5f5] py-12"
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3B806B]">
+                {copy.projects.title}
               </p>
-              <div className="mt-6 text-sm text-neutral-500">
-                <p className="font-semibold text-neutral-900">
-                  {content.approach.signature}
-                </p>
-                <p>{content.approach.role}</p>
-              </div>
+              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
+                {copy.projects.subtitle}
+              </h2>
+            </div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {PROJECTS.map((project, index) => {
+                const badge = CATEGORY_BADGES[project.category];
+                const name = project.labels[language].name;
+                const badgeLabel = badge.labels[language];
+                return (
+                  <motion.figure
+                    key={`${project.image}-${name}`}
+                    className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
+                    variants={sectionVariants}
+                  >
+                    <div className="relative h-60 overflow-hidden">
+                      <Image
+                        src={project.image}
+                        alt={name}
+                        fill
+                        priority={index === 0}
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 transition group-hover:opacity-100">
+                        <span className="rounded-full border border-white/50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white">
+                          {overlayLabel}
+                        </span>
+                      </div>
+                    </div>
+                    <figcaption className="flex items-center justify-between px-5 py-4">
+                      <div>
+                        <p className="text-sm font-semibold text-neutral-900">{name}</p>
+                      </div>
+                      <span
+                        className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]"
+                        style={{ backgroundColor: badge.color, color: "#1b1b1b" }}
+                      >
+                        {badgeLabel}
+                      </span>
+                    </figcaption>
+                  </motion.figure>
+                );
+              })}
             </div>
           </div>
-          <div className="relative h-[420px] w-full flex-1 overflow-hidden rounded-3xl border border-neutral-200 shadow-lg shadow-neutral-900/10">
-            <Image
-              src="/images/proyectos/proyecto-5.webp"
-              alt={content.approach.imageAlt}
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        </div>
-      </section>
+        </motion.section>
 
-      <section className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400">
-          {content.testimonials.title}
-        </p>
-        <h2 className="mt-4 max-w-2xl text-3xl font-semibold sm:text-4xl">
-          {language === "es"
-            ? "Estudios, desarrolladoras y constructoras confían en nuestro proceso."
-            : "Studios, developers and builders rely on our process."}
-        </h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {testimonials.map((testimonial, index) => {
-            const isVisible = visibleTestimonials.includes(index);
-            return (
-              <div
-                key={testimonial.author}
-                data-index={index}
-                ref={(el) => {
-                  testimonialRefs.current[index] = el;
-                }}
-                className={`rounded-3xl border border-neutral-200 bg-white/90 p-6 shadow-sm shadow-neutral-900/5 backdrop-blur transition duration-700 ease-out ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-              >
-                <p className="text-sm italic text-neutral-600">{testimonial.quote}</p>
+        <motion.section
+          className="bg-[#f7f7f7]"
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-8 px-6 py-12 lg:flex-row">
+            <motion.div
+              className="w-full flex-1"
+              variants={sectionVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#3B806B]">
+                {copy.approach.title}
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
+                {copy.approach.heading}
+              </h2>
+              <div className="mt-6 rounded-3xl border border-neutral-300/50 bg-white/80 p-6 shadow-sm shadow-neutral-900/5 backdrop-blur">
+                <p className="text-base italic text-neutral-600">
+                  &ldquo;{copy.approach.quote}&rdquo;
+                </p>
                 <div className="mt-6 text-sm text-neutral-500">
-                  <p className="font-semibold text-neutral-900">{testimonial.author}</p>
-                  <p>{testimonial.role}</p>
+                  <p className="font-semibold text-neutral-900">{copy.approach.author}</p>
+                  <p>{copy.approach.role}</p>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="relative overflow-hidden bg-[#1b1b1b] py-20 sm:py-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_55%)]" />
-        <div className="relative mx-auto max-w-4xl px-6 text-center text-white">
-          <h2 className="text-3xl font-semibold sm:text-4xl">
-            {content.cta.title}
-          </h2>
-          <div className="mt-8">
-            <Link
-              href="/contacto"
-              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-900 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-neutral-100"
+            </motion.div>
+            <motion.div
+              className="relative h-[360px] w-full flex-1 overflow-hidden rounded-3xl border border-neutral-200 shadow-lg shadow-neutral-900/10"
+              variants={sectionVariants}
             >
-              {content.cta.button}
-            </Link>
+              <Image
+                src="/images/proyectos/proyecto-5.webp"
+                alt="Render interior con luz tenue"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </motion.div>
           </div>
-        </div>
-      </section>
-    </div>
+        </motion.section>
+
+        <motion.section
+          className="mx-auto max-w-6xl px-6 py-12"
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#C2A85F]">
+            {copy.testimonials.title}
+          </p>
+          <h2 className="mt-4 max-w-2xl text-3xl font-semibold sm:text-4xl">
+            {copy.testimonials.subtitle}
+          </h2>
+          <motion.div
+            className="mt-8 grid gap-4 md:grid-cols-3"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {testimonials.map((item) => (
+              <motion.article
+                key={item.author}
+                variants={sectionVariants}
+                className="rounded-3xl border border-neutral-200 bg-white/90 p-6 shadow-sm shadow-neutral-900/5 backdrop-blur transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
+              >
+                <p className="text-sm italic text-neutral-600">
+                  &ldquo;{item.quote}&rdquo;
+                </p>
+                <div className="mt-6 text-sm text-neutral-500">
+                  <p className="font-semibold text-neutral-900">{item.author}</p>
+                  <p>{item.role}</p>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+        </motion.section>
+
+        <motion.section
+          className="relative overflow-hidden bg-[#111] py-12"
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_55%)]" />
+          <div className="relative mx-auto max-w-3xl px-6 text-center text-white">
+            <h2 className="text-3xl font-semibold sm:text-4xl">{copy.cta.title}</h2>
+            <div className="mt-8">
+              <Link
+                href="/contacto"
+                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#111] shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:bg-neutral-200"
+              >
+                {copy.cta.button}
+              </Link>
+            </div>
+          </div>
+        </motion.section>
+      </main>
+    </>
   );
 }
