@@ -1,9 +1,29 @@
 import Link from "next/link";
 
-const SOCIAL_LINKS = [
+type FooterLabels = {
+  heading: string;
+  location: string;
+  phone: string;
+  email: string;
+  rights: string;
+  instagram: string;
+  behance: string;
+};
+
+type SocialKey = "instagram" | "behance";
+
+type FooterProps = {
+  labels: FooterLabels;
+};
+
+const SOCIALS: Array<{
+  href: string;
+  key: SocialKey;
+  icon: JSX.Element;
+}> = [
   {
     href: "https://instagram.com/jg_archviz",
-    label: "Instagram",
+    key: "instagram",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +42,7 @@ const SOCIAL_LINKS = [
   },
   {
     href: "https://behance.net/juangranato2",
-    label: "Behance",
+    key: "behance",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -40,53 +60,34 @@ const SOCIAL_LINKS = [
       </svg>
     ),
   },
-  {
-    href: "https://www.linkedin.com",
-    label: "LinkedIn",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        className="h-5 w-5"
-        aria-hidden="true"
-      >
-        <path d="M4.75 9.5h3.5v10.5h-3.5z" />
-        <circle cx="6.5" cy="5.5" r="2" />
-        <path d="M11.75 9.5h3.2v1.6c.6-1 1.7-1.9 3.5-1.9 2.7 0 4.8 1.8 4.8 5.6v5.2h-3.5v-4.8c0-1.6-.5-2.7-2-2.7-1.1 0-1.8.7-2.1 1.4-.1.2-.1.6-.1.9v5.2h-3.5z" />
-      </svg>
-    ),
-  },
-];
+] ;
 
-export function Footer() {
+export function Footer({ labels }: FooterProps) {
   return (
     <footer className="bg-[#111] text-[#f1f1f1]">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1 text-sm">
           <p className="text-base font-semibold uppercase tracking-[0.2em] text-white">
-            JG Visual Estudio
+            {labels.heading}
           </p>
-          <p>Rosario - Funes</p>
-          <p>Tel: 0341 5799316</p>
+          <p>{labels.location}</p>
+          <p>{labels.phone}</p>
           <Link
-            href="mailto:contacto@jgvisual.com"
+            href={`mailto:${labels.email}`}
             className="transition hover:text-white"
           >
-            contacto@jgvisual.com
+            {labels.email}
           </Link>
         </div>
         <div className="flex gap-4">
-          {SOCIAL_LINKS.map((item) => (
+          {SOCIALS.map((item) => (
             <Link
-              key={item.label}
+              key={item.key}
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white transition hover:-translate-y-1 hover:border-[#C2A85F] hover:text-[#C2A85F]"
-              aria-label={item.label}
+              aria-label={labels[item.key]}
             >
               {item.icon}
             </Link>
@@ -94,7 +95,7 @@ export function Footer() {
         </div>
       </div>
       <p className="border-t border-white/10 px-6 py-6 text-center text-xs text-[#d0d0d0]">
-        2025 JG Visual Estudio - Todos los derechos reservados
+        {labels.rights}
       </p>
     </footer>
   );

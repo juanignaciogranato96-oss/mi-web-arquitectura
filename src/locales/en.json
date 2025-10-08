@@ -1,0 +1,118 @@
+{
+  "hero": {
+    "badge": "JG VISUAL STUDIO \u00b7 LED BY ARCH. JUAN GRANATO",
+    "title": "We design and visualize architecture you can feel.",
+    "subtitle": "Renderings, design and permitting services in Rosario and Funes.",
+    "buttons": {
+      "projects": "View projects",
+      "quote": "Request a quote",
+      "whatsapp": "Chat on WhatsApp"
+    }
+  },
+  "services": {
+    "title": "Services",
+    "subtitle": "We support every project stage with hyper-realistic visuals, integrated design and documentation management.",
+    "items": [
+      {
+        "title": "Hyper-realistic 3D render",
+        "description": "Imagery that communicates ideas before construction and strengthens sales."
+      },
+      {
+        "title": "Integrated architectural design",
+        "description": "Concept, development and construction detailing aligned with client objectives."
+      },
+      {
+        "title": "Building regularization",
+        "description": "Technical and paperwork management in Rosario and Funes with close follow-up."
+      }
+    ]
+  },
+  "projects": {
+    "title": "Latest projects",
+    "subtitle": "Visual stories highlighting materiality, light and how each space is experienced.",
+    "overlay": "View project",
+    "items": [
+      {
+        "image": "/images/estudio/CAFETERIA-CHILIN-FRENTE.webp",
+        "name": "Chilin Caf\u00e9",
+        "category": "commercial"
+      },
+      {
+        "image": "/images/estudio/CASA-HA-DIA.webp",
+        "name": "Concrete House",
+        "category": "residential"
+      },
+      {
+        "image": "/images/estudio/CASA-JJ-COCINA.webp",
+        "name": "Teros House Kitchen",
+        "category": "residential"
+      },
+      {
+        "image": "/images/estudio/CASA-KAI-SOFA.webp",
+        "name": "Nexus Apartment",
+        "category": "residential"
+      },
+      {
+        "image": "/images/estudio/CASA-KAI-FRENTE-DIA.webp",
+        "name": "Kai House",
+        "category": "residential"
+      },
+      {
+        "image": "/images/estudio/GLAM-COMERCIAL-FRENTE.webp",
+        "name": "Glam Retail",
+        "category": "commercial"
+      }
+    ],
+    "categories": {
+      "commercial": "Commercial",
+      "residential": "Residential"
+    }
+  },
+  "approach": {
+    "title": "Our approach",
+    "heading": "We turn ideas into images that inspire, anticipate and sell projects before they are built.",
+    "quote": "Each render is a strategic tool aligning vision, investment and key approvals.",
+    "author": "Arch. Juan Granato",
+    "role": "Director at JG Visual Studio"
+  },
+  "testimonials": {
+    "title": "Testimonials",
+    "subtitle": "Studios, developers and builders rely on our process.",
+    "items": [
+      {
+        "quote": "The level of detail in Juan's renders lets us solve decisions ahead of construction and elevate every investor presentation.",
+        "author": "Arch. Sofia Mendez",
+        "role": "Habitat Studio"
+      },
+      {
+        "quote": "The collaborative methodology keeps consistency from concept through final documentation.",
+        "author": "Eng. Nicolas Raffo",
+        "role": "RFX Construction"
+      },
+      {
+        "quote": "He meets demanding timelines without sacrificing precision and is our partner for permitting in Rosario and Funes.",
+        "author": "Dr. Valentina Cano",
+        "role": "Real estate developer"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to showcase your project like never before?",
+    "button": "Request a quote"
+  },
+  "header": {
+    "logo": "JG VISUAL STUDIO",
+    "projects": "View projects",
+    "quote": "Request a quote",
+    "whatsapp": "WhatsApp"
+  },
+  "footer": {
+    "heading": "JG VISUAL STUDIO",
+    "location": "Rosario \u2022 Funes",
+    "phone": "Tel: +54 9 341 5799316",
+    "email": "juanignaciogranato96@hotmail.com",
+    "rights": "2025 JG Visual Studio - All rights reserved",
+    "instagram": "Instagram",
+    "behance": "Behance"
+  }
+}
