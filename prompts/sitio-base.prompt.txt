@@ -1,0 +1,21 @@
+Quiero que generes el código completo de mi página web en Next.js (versión 15 o superior) con Tailwind CSS.
+El estudio se llama **J.G. Diseño y Visualización Arquitectónica**.
+Servicios principales:
+- Renders hiperrealistas (arquitectura residencial y comercial)
+- Diseño arquitectónico integral
+- Regularización de obra (Rosario / Funes)
+
+Requerimientos:
+1. Estructura con páginas: Home (/), Servicios (/servicios), Empresa (/empresa), Contacto (/contacto)
+2. Menú superior fijo con logo + links a esas secciones.
+3. Footer con redes, contacto y derechos de autor.
+4. Paleta base: blanco / gris / negro, estilo limpio tipo *Render3R*.
+5. Textos en español con opción de inglés (usar next-intl o un sistema simple de i18n).
+6. En el Home incluir:
+   - Hero visual con texto principal: “Diseñamos y visualizamos arquitectura que se vive.”
+   - Sección de servicios resumidos (3 tarjetas)
+   - CTA a contacto con botón de WhatsApp (0341 579 9316)
+7. En Empresa usar el estilo de Render3R: Equipo, Filosofía, Clientes, Proceso, Ubicación.
+8. En Contacto: formulario simple (nombre, email, mensaje) + botón de WhatsApp directo.
+9. Las imágenes estarán en /public/images/.
+10. Código limpio, responsive, con fuentes modernas, en TypeScript.
