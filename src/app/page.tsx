@@ -11,7 +11,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Testimonios } from "@/components/Testimonios";
+import Hero from "@/components/Hero";
+import Testimonios from "@/components/Testimonios";
 import { proyectos } from "@/data/proyectos";
 import type { Proyecto } from "@/data/proyectos";
 import type { LocaleKey } from "@/locales";
@@ -171,9 +172,9 @@ export default function HomePage() {
     return proyectos.map((proyecto: Proyecto, index: number) => {
       const translation = itemsBySlug.get(proyecto.slug);
       const categoryKey: ProjectCategory = proyecto.categoria;
-      const primaryImage = proyecto.imagenes[0] ?? DEFAULT_PROJECT_FALLBACK;
+      const primaryImage = proyecto.portada ?? DEFAULT_PROJECT_FALLBACK;
       const fallbackImage =
-        proyecto.imagenes[1] ?? proyecto.imagenes[0] ?? DEFAULT_PROJECT_FALLBACK;
+        proyecto.imagenes[0] ?? DEFAULT_PROJECT_FALLBACK;
 
       return {
         slug: proyecto.slug,
@@ -186,7 +187,6 @@ export default function HomePage() {
       };
     });
   }, [copy.projects.items, copy.projects.categories]);
-  const testimonialItems = copy.testimonials.items;
 
   const handleProjectsClick = useCallback(() => {
     const target = document.getElementById("projects");
@@ -206,57 +206,14 @@ export default function HomePage() {
       />
 
       <main className="bg-white text-neutral-900">
-        <section className="relative flex h-screen w-full items-center justify-center overflow-hidden text-center text-white">
-          <video
-            src="/videos/hero.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/images/hero.webp"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-          <motion.div
-            className="relative z-10 max-w-3xl px-6"
-            initial={{ opacity: 0, y: 36 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-          >
-            <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
-              {copy.hero.badge}
-            </h2>
-            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              {copy.hero.title}
-            </h1>
-            <p className="mt-4 text-lg text-neutral-200 sm:text-xl">
-              {copy.hero.subtitle}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href="#proyectos"
-                onClick={handleProjectsClick}
-                className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-200"
-              >
-                {copy.hero.buttons.projects}
-              </a>
-              <Link
-                href="/presupuesto"
-                className="rounded-full bg-neutral-800 px-5 py-2 text-sm font-semibold text-white transition hover:bg-neutral-700"
-              >
-                {copy.hero.buttons.quote}
-              </Link>
-              <Link
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-[#1b4332] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#2d6a4f]"
-              >
-                {copy.hero.buttons.whatsapp}
-              </Link>
-            </div>
-          </motion.div>
-        </section>
+        <Hero
+          badge={copy.hero.badge}
+          title={copy.hero.title}
+          subtitle={copy.hero.subtitle}
+          buttons={copy.hero.buttons}
+          onProjectsClick={handleProjectsClick}
+          whatsappUrl={WHATSAPP_URL}
+        />
 
         <motion.section
           className="mx-auto max-w-6xl px-6 py-20"
@@ -390,11 +347,7 @@ export default function HomePage() {
           </div>
         </motion.section>
 
-        <Testimonios
-          title={copy.testimonials.title}
-          subtitle={copy.testimonials.subtitle}
-          testimonials={testimonialItems}
-        />
+        <Testimonios />
 
         <motion.section
           className="relative overflow-hidden bg-[#0a0a0a] py-20"

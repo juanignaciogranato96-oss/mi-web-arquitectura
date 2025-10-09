@@ -1,12 +1,12 @@
 export default function PresupuestoPage() {
   return (
-    <section className="mx-auto max-w-xl px-6 py-20">
-      <h1 className="text-center text-3xl font-bold text-neutral-900 sm:text-4xl">
+    <section className="max-w-lg mx-auto py-16 px-6">
+      <h1 className="text-3xl font-bold text-center text-neutral-900 sm:text-4xl">
         Solicitar presupuesto
       </h1>
       <p className="mt-4 text-center text-neutral-600">
-        Completá el formulario y nos pondremos en contacto para acompañarte en la
-        próxima etapa de tu proyecto.
+        Completá el formulario y nos pondremos en contacto para acompañarte en
+        la próxima etapa de tu proyecto.
       </p>
       <form className="mt-10 space-y-6">
         <div>
@@ -45,7 +45,7 @@ export default function PresupuestoPage() {
           <select
             className="mt-2 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-[#1b4332] focus:outline-none focus:ring-2 focus:ring-[#1b4332]/20"
           >
-            <option>Render 3D hiperrealista</option>
+            <option>Render 3D</option>
             <option>Diseño arquitectónico integral</option>
             <option>Regularización de obra</option>
           </select>
@@ -57,6 +57,17 @@ export default function PresupuestoPage() {
           <textarea
             className="mt-2 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm focus:border-[#1b4332] focus:outline-none focus:ring-2 focus:ring-[#1b4332]/20"
             rows={4}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-neutral-800">
+            Adjuntar archivos (planos, imágenes, PDFs)
+          </label>
+          <input
+            type="file"
+            multiple
+            accept=".jpg,.jpeg,.png,.pdf"
+            className="mt-2 w-full rounded-md border border-dashed border-neutral-300 bg-white px-3 py-6 text-sm text-neutral-600 shadow-sm focus:border-[#1b4332] focus:outline-none focus:ring-2 focus:ring-[#1b4332]/20"
           />
         </div>
         <button

@@ -11,10 +11,10 @@
   },
   "services": {
     "title": "Servicios",
-    "subtitle": "Acompañamos cada etapa del proyecto con visualizaciones hiperrealistas, diseño integral y gestión documental.",
+    "subtitle": "Acompañamos cada etapa del proyecto con visualizaciones 3D, diseño integral y gestión documental.",
     "items": [
       {
-        "title": "Render 3D hiperrealista",
+        "title": "Render 3D",
         "description": "Imágenes que comunican ideas antes de construir y potencian ventas."
       },
       {
@@ -108,7 +108,7 @@
   },
   "footer": {
     "heading": "JG VISUAL ESTUDIO",
-    "location": "Rosario • Funes",
+    "location": "Rosario · Funes",
     "phone": "Tel: 0341 5799316",
     "email": "juanignaciogranato96@hotmail.com",
     "rights": "2025 JG Visual Estudio - Todos los derechos reservados",
