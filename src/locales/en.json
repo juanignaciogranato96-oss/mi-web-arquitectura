@@ -1,12 +1,12 @@
 {
   "hero": {
-    "badge": "JG VISUAL STUDIO \u00b7 LED BY ARCH. JUAN GRANATO",
+    "badge": "JG VISUAL STUDIO · LED BY ARCH. JUAN GRANATO",
     "title": "We design and visualize architecture you can feel.",
     "subtitle": "Renderings, design and permitting services in Rosario and Funes.",
     "buttons": {
       "projects": "View projects",
       "quote": "Request a quote",
-      "whatsapp": "Chat on WhatsApp"
+      "whatsapp": "WhatsApp"
     }
   },
   "services": {
@@ -33,34 +33,34 @@
     "overlay": "View project",
     "items": [
       {
-        "image": "/images/estudio/CAFETERIA-CHILIN-FRENTE.webp",
-        "name": "Chilin Caf\u00e9",
-        "category": "commercial"
+        "slug": "cafe-chilin",
+        "name": "Chilin Café",
+        "type": "Commercial"
       },
       {
-        "image": "/images/estudio/CASA-HA-DIA.webp",
+        "slug": "casa-hormigon",
         "name": "Concrete House",
-        "category": "residential"
+        "type": "Residential"
       },
       {
-        "image": "/images/estudio/CASA-JJ-COCINA.webp",
+        "slug": "casa-teros",
         "name": "Teros House Kitchen",
-        "category": "residential"
+        "type": "Residential"
       },
       {
-        "image": "/images/estudio/CASA-KAI-SOFA.webp",
+        "slug": "departamento-nexus",
         "name": "Nexus Apartment",
-        "category": "residential"
+        "type": "Residential"
       },
       {
-        "image": "/images/estudio/CASA-KAI-FRENTE-DIA.webp",
+        "slug": "casa-kai",
         "name": "Kai House",
-        "category": "residential"
+        "type": "Residential"
       },
       {
-        "image": "/images/estudio/GLAM-COMERCIAL-FRENTE.webp",
+        "slug": "local-glam",
         "name": "Glam Retail",
-        "category": "commercial"
+        "type": "Commercial"
       }
     ],
     "categories": {
@@ -108,7 +108,7 @@
   },
   "footer": {
     "heading": "JG VISUAL STUDIO",
-    "location": "Rosario \u2022 Funes",
+    "location": "Rosario • Funes",
     "phone": "Tel: +54 9 341 5799316",
     "email": "juanignaciogranato96@hotmail.com",
     "rights": "2025 JG Visual Studio - All rights reserved",

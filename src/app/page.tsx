@@ -11,6 +11,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Testimonios } from "@/components/Testimonios";
+import { proyectos } from "@/data/proyectos";
+import type { Proyecto } from "@/data/proyectos";
 import type { LocaleKey } from "@/locales";
 import { getCopy } from "@/locales";
 
@@ -41,7 +44,21 @@ const SERVICE_ICONS = [
   ClipboardDocumentCheckIcon,
 ] as const;
 
+type CopyContent = ReturnType<typeof getCopy>;
+type ProjectCopyItem = CopyContent["projects"]["items"][number];
+
+type ProjectCardData = {
+  slug: string;
+  order: number;
+  image: string;
+  fallbackImage: string;
+  name: string;
+  categoryKey: ProjectCategory;
+  categoryLabel: string;
+};
+
 type ProjectCardProps = {
+  slug: string;
   image: string;
   name: string;
   categoryKey: ProjectCategory;
@@ -52,6 +69,7 @@ type ProjectCardProps = {
 };
 
 function ProjectCard({
+  slug,
   image,
   name,
   categoryKey,
@@ -68,40 +86,46 @@ function ProjectCard({
   const badgeColor = CATEGORY_COLORS[categoryKey] ?? "#EAC64D";
 
   return (
-    <motion.figure
-      className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
-      variants={sectionVariants}
+    <Link
+      href={`/proyectos/${slug}`}
+      aria-label={`${overlayLabel} ${name}`}
+      className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
     >
-      <div className="relative h-60 overflow-hidden">
-        <Image
-          src={src}
-          alt={name}
-          fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          priority={isPriority}
-          className="object-cover transition duration-700 group-hover:scale-105"
-          onError={() => {
-            if (src !== fallback) {
-              setSrc(fallback);
-            }
-          }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 transition group-hover:opacity-100">
-          <span className="rounded-full border border-white/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white">
-            {overlayLabel}
-          </span>
+      <motion.figure
+        className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
+        variants={sectionVariants}
+      >
+        <div className="relative h-60 overflow-hidden">
+          <Image
+            src={src}
+            alt={name}
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            priority={isPriority}
+            className="object-cover transition duration-700 group-hover:scale-105"
+            onError={() => {
+              if (src !== fallback) {
+                setSrc(fallback);
+              }
+            }}
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 transition group-hover:opacity-100">
+            <span className="rounded-full border border-white/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white">
+              {overlayLabel}
+            </span>
+          </div>
         </div>
-      </div>
-      <figcaption className="flex items-center justify-between px-5 py-4">
-        <p className="text-sm font-semibold text-neutral-900">{name}</p>
-        <span
-          className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]"
-          style={{ backgroundColor: badgeColor, color: "#0a0a0a" }}
-        >
-          {categoryLabel}
-        </span>
-      </figcaption>
-    </motion.figure>
+        <figcaption className="flex items-center justify-between px-5 py-4">
+          <p className="text-sm font-semibold text-neutral-900">{name}</p>
+          <span
+            className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]"
+            style={{ backgroundColor: badgeColor, color: "#0a0a0a" }}
+          >
+            {categoryLabel}
+          </span>
+        </figcaption>
+      </motion.figure>
+    </Link>
   );
 }
 
@@ -137,7 +161,31 @@ export default function HomePage() {
     [copy.services.items],
   );
 
-  const projects = copy.projects.items;
+  const projectCards = useMemo<ProjectCardData[]>(() => {
+    const itemsBySlug = new Map<string, ProjectCopyItem>(
+      copy.projects.items.map((item) => [item.slug, item] as const),
+    );
+    const categoryLabels = copy.projects
+      .categories as Record<ProjectCategory, string>;
+
+    return proyectos.map((proyecto: Proyecto, index: number) => {
+      const translation = itemsBySlug.get(proyecto.slug);
+      const categoryKey: ProjectCategory = proyecto.categoria;
+      const primaryImage = proyecto.imagenes[0] ?? DEFAULT_PROJECT_FALLBACK;
+      const fallbackImage =
+        proyecto.imagenes[1] ?? proyecto.imagenes[0] ?? DEFAULT_PROJECT_FALLBACK;
+
+      return {
+        slug: proyecto.slug,
+        order: index,
+        image: primaryImage,
+        fallbackImage,
+        name: translation?.name ?? proyecto.nombre,
+        categoryKey,
+        categoryLabel: translation?.type ?? categoryLabels[categoryKey],
+      };
+    });
+  }, [copy.projects.items, copy.projects.categories]);
   const testimonialItems = copy.testimonials.items;
 
   const handleProjectsClick = useCallback(() => {
@@ -160,40 +208,40 @@ export default function HomePage() {
       <main className="bg-white text-neutral-900">
         <section className="relative flex h-screen w-full items-center justify-center overflow-hidden text-center text-white">
           <video
-            src="/videos/casa-ha.mp4"
+            src="/videos/hero.mp4"
             autoPlay
             muted
             loop
             playsInline
-            poster="/images/estudio/CASA-HA-DIA.webp"
+            poster="/images/hero.webp"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/45" />
+          <div className="absolute inset-0 bg-black/40" />
           <motion.div
             className="relative z-10 max-w-3xl px-6"
             initial={{ opacity: 0, y: 36 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
+            <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
               {copy.hero.badge}
             </h2>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
               {copy.hero.title}
             </h1>
             <p className="mt-4 text-lg text-neutral-200 sm:text-xl">
               {copy.hero.subtitle}
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
+              <a
+                href="#proyectos"
                 onClick={handleProjectsClick}
                 className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-200"
               >
                 {copy.hero.buttons.projects}
-              </button>
+              </a>
               <Link
-                href="/contacto"
+                href="/presupuesto"
                 className="rounded-full bg-neutral-800 px-5 py-2 text-sm font-semibold text-white transition hover:bg-neutral-700"
               >
                 {copy.hero.buttons.quote}
@@ -277,26 +325,18 @@ export default function HomePage() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              {projects.map((project, index) => {
-                const categoryKey = project.category as ProjectCategory;
-                const categoryLabels = copy.projects
-                  .categories as Record<ProjectCategory, string>;
-                const categoryLabel = categoryLabels[categoryKey];
-
+              {projectCards.map((project) => {
                 return (
                   <ProjectCard
-                    key={`${project.image}-${project.name}`}
+                    key={project.slug}
+                    slug={project.slug}
                     image={project.image}
                     name={project.name}
-                    categoryKey={categoryKey}
-                    categoryLabel={categoryLabel}
+                    categoryKey={project.categoryKey}
+                    categoryLabel={project.categoryLabel}
                     overlayLabel={copy.projects.overlay}
-                    isPriority={index === 0}
-                    fallbackImage={
-                      project.image.includes("/en/")
-                        ? project.image.replace("/en/", "/")
-                        : undefined
-                    }
+                    isPriority={project.order === 0}
+                    fallbackImage={project.fallbackImage}
                   />
                 );
               })}
@@ -350,43 +390,11 @@ export default function HomePage() {
           </div>
         </motion.section>
 
-        <motion.section
-          className="mx-auto max-w-6xl px-6 py-20"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#C2A85F]">
-            {copy.testimonials.title}
-          </p>
-          <h2 className="mt-4 max-w-2xl text-3xl font-semibold sm:text-4xl">
-            {copy.testimonials.subtitle}
-          </h2>
-          <motion.div
-            className="mt-8 grid gap-4 md:grid-cols-3"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-          >
-            {testimonialItems.map((testimonial) => (
-              <motion.article
-                key={`${testimonial.author}-${testimonial.role}`}
-                variants={sectionVariants}
-                className="rounded-3xl border border-neutral-200 bg-white/90 p-6 shadow-sm shadow-neutral-900/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
-              >
-                <p className="text-sm font-light italic text-neutral-600">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </p>
-                <div className="mt-6 text-sm text-neutral-500">
-                  <p className="font-semibold text-neutral-900">{testimonial.author}</p>
-                  <p>{testimonial.role}</p>
-                </div>
-              </motion.article>
-            ))}
-          </motion.div>
-        </motion.section>
+        <Testimonios
+          title={copy.testimonials.title}
+          subtitle={copy.testimonials.subtitle}
+          testimonials={testimonialItems}
+        />
 
         <motion.section
           className="relative overflow-hidden bg-[#0a0a0a] py-20"
@@ -400,7 +408,7 @@ export default function HomePage() {
             <h2 className="text-3xl font-semibold sm:text-4xl">{copy.cta.title}</h2>
             <div className="mt-8">
               <Link
-                href="/contacto"
+                href="/presupuesto"
                 className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#0a0a0a] shadow-lg shadow-black/25 transition hover:-translate-y-1 hover:bg-neutral-200"
               >
                 {copy.cta.button}
@@ -413,6 +421,8 @@ export default function HomePage() {
     </>
   );
 }
+
+
 
 
 

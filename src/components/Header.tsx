@@ -46,7 +46,7 @@ export function Header({
             {labels.projects}
           </button>
           <Link
-            href="/contacto"
+            href="/presupuesto"
             className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:border-white hover:bg-white/10"
           >
             {labels.quote}

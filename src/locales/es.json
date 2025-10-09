@@ -1,66 +1,66 @@
 {
   "hero": {
-    "badge": "JG VISUAL ESTUDIO \u00b7 DIRIGIDO POR EL ARQ. JUAN GRANATO",
-    "title": "Dise\u00f1amos y visualizamos arquitectura que se vive.",
-    "subtitle": "Renders, dise\u00f1o y regularizaci\u00f3n de obra en Rosario y Funes.",
+    "badge": "JG VISUAL ESTUDIO · DIRIGIDO POR EL ARQ. JUAN GRANATO",
+    "title": "Diseñamos y visualizamos arquitectura que se vive.",
+    "subtitle": "Renders, diseño y regularización de obra en Rosario y Funes.",
     "buttons": {
       "projects": "Ver proyectos",
       "quote": "Solicitar presupuesto",
-      "whatsapp": "Consultar por WhatsApp"
+      "whatsapp": "WhatsApp"
     }
   },
   "services": {
     "title": "Servicios",
-    "subtitle": "Acompa\u00f1amos cada etapa del proyecto con visualizaciones hiperrealistas, dise\u00f1o integral y gesti\u00f3n documental.",
+    "subtitle": "Acompañamos cada etapa del proyecto con visualizaciones hiperrealistas, diseño integral y gestión documental.",
     "items": [
       {
         "title": "Render 3D hiperrealista",
-        "description": "Im\u00e1genes que comunican ideas antes de construir y potencian ventas."
+        "description": "Imágenes que comunican ideas antes de construir y potencian ventas."
       },
       {
-        "title": "Dise\u00f1o arquitect\u00f3nico integral",
+        "title": "Diseño arquitectónico integral",
         "description": "Concepto, desarrollo y detalle constructivo alineado a objetivos del cliente."
       },
       {
-        "title": "Regularizaci\u00f3n de obra",
-        "description": "Gesti\u00f3n t\u00e9cnica y documental en Rosario y Funes con seguimiento cercano."
+        "title": "Regularización de obra",
+        "description": "Gestión técnica y documental en Rosario y Funes con seguimiento cercano."
       }
     ]
   },
   "projects": {
-    "title": "\u00daltimos proyectos",
+    "title": "Últimos proyectos",
     "subtitle": "Visuales que destacan la esencia material, la luz y el habitar de cada espacio.",
     "overlay": "Ver proyecto",
     "items": [
       {
-        "image": "/images/estudio/CAFETERIA-CHILIN-FRENTE.webp",
-        "name": "Caf\u00e9 Chilin",
-        "category": "commercial"
+        "slug": "cafe-chilin",
+        "name": "Café Chilin",
+        "type": "Comercial"
       },
       {
-        "image": "/images/estudio/CASA-HA-DIA.webp",
-        "name": "Casa Hormig\u00f3n",
-        "category": "residential"
+        "slug": "casa-hormigon",
+        "name": "Casa Hormigón",
+        "type": "Residencial"
       },
       {
-        "image": "/images/estudio/CASA-JJ-COCINA.webp",
+        "slug": "casa-teros",
         "name": "Cocina Casa Teros",
-        "category": "residential"
+        "type": "Residencial"
       },
       {
-        "image": "/images/estudio/CASA-KAI-SOFA.webp",
+        "slug": "departamento-nexus",
         "name": "Departamento Nexus",
-        "category": "residential"
+        "type": "Residencial"
       },
       {
-        "image": "/images/estudio/CASA-KAI-FRENTE-DIA.webp",
+        "slug": "casa-kai",
         "name": "Casa Kai",
-        "category": "residential"
+        "type": "Residencial"
       },
       {
-        "image": "/images/estudio/GLAM-COMERCIAL-FRENTE.webp",
+        "slug": "local-glam",
         "name": "Local Glam",
-        "category": "commercial"
+        "type": "Comercial"
       }
     ],
     "categories": {
@@ -70,34 +70,34 @@
   },
   "approach": {
     "title": "Nuestro enfoque",
-    "heading": "Transformamos ideas en im\u00e1genes que inspiran, anticipan y venden proyectos antes de construirse.",
-    "quote": "Cada render es una herramienta estrat\u00e9gica que alinea visi\u00f3n, inversi\u00f3n y aprobaciones clave.",
+    "heading": "Transformamos ideas en imágenes que inspiran, anticipan y venden proyectos antes de construirse.",
+    "quote": "Cada render es una herramienta estratégica que alinea visión, inversión y aprobaciones clave.",
     "author": "Arq. Juan Granato",
     "role": "Director de JG Visual Estudio"
   },
   "testimonials": {
     "title": "Testimonios",
-    "subtitle": "Estudios, desarrolladoras y constructoras conf\u00edan en nuestro proceso.",
+    "subtitle": "Estudios, desarrolladoras y constructoras confían en nuestro proceso.",
     "items": [
       {
-        "quote": "El nivel de detalle en los Renders de Juan nos permite resolver decisiones antes de obra y elevar cada presentaci\u00f3n con inversores.",
-        "author": "Arq. Sof\u00eda M\u00e9ndez",
-        "role": "Estudio Habitat"
+        "quote": "El nivel de detalle en los renders de Juan permite resolver decisiones antes de obra y elevar la presentación con inversores.",
+        "author": "Arq. Sofía Méndez",
+        "role": "Estudio Hábitat"
       },
       {
-        "quote": "La metodolog\u00eda colaborativa asegura consistencia desde el concepto hasta la documentaci\u00f3n final.",
-        "author": "Ing. Nicol\u00e1s Raffo",
+        "quote": "La metodología colaborativa asegura consistencia desde el concepto hasta la documentación final.",
+        "author": "Ing. Nicolás Raffo",
         "role": "Constructora RFX"
       },
       {
-        "quote": "Cumple plazos exigentes sin resignar precisi\u00f3n y es nuestro aliado para regularizaciones en Rosario y Funes.",
+        "quote": "Cumple plazos exigentes sin resignar precisión y es nuestro aliado para regularizaciones en Rosario y Funes.",
         "author": "Dra. Valentina Cano",
         "role": "Desarrolladora inmobiliaria"
       }
     ]
   },
   "cta": {
-    "title": "\u00bfListo para mostrar tu proyecto como nunca antes?",
+    "title": "¿Listo para mostrar tu proyecto como nunca antes?",
     "button": "Solicitar presupuesto"
   },
   "header": {
@@ -108,7 +108,7 @@
   },
   "footer": {
     "heading": "JG VISUAL ESTUDIO",
-    "location": "Rosario \u2022 Funes",
+    "location": "Rosario • Funes",
     "phone": "Tel: 0341 5799316",
     "email": "juanignaciogranato96@hotmail.com",
     "rights": "2025 JG Visual Estudio - Todos los derechos reservados",
