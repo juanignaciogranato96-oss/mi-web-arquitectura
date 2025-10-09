@@ -60,13 +60,13 @@ const SOCIALS: Array<{
       </svg>
     ),
   },
-] ;
+];
 
 export function Footer({ labels }: FooterProps) {
   return (
-    <footer className="bg-[#111] text-[#f1f1f1]">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-12 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-1 text-sm">
+    <footer className="bg-[#0a0a0a] text-[#f1f1f1]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-20 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2 text-sm">
           <p className="text-base font-semibold uppercase tracking-[0.2em] text-white">
             {labels.heading}
           </p>
@@ -74,7 +74,7 @@ export function Footer({ labels }: FooterProps) {
           <p>{labels.phone}</p>
           <Link
             href={`mailto:${labels.email}`}
-            className="transition hover:text-white"
+            className="transition-colors hover:text-[#C2A85F]"
           >
             {labels.email}
           </Link>

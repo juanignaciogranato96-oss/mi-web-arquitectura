@@ -28,11 +28,11 @@ export function Header({
   whatsappUrl,
 }: HeaderProps) {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0a0a0a]/65 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
         <Link
           href="/"
-          className="text-sm font-semibold uppercase tracking-[0.35em] text-white"
+          className="text-xs font-semibold uppercase tracking-[0.35em] text-white sm:text-sm"
           aria-label={labels.logo}
         >
           {labels.logo}

@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -21,14 +21,7 @@ const CATEGORY_COLORS: Record<ProjectCategory, string> = {
   residential: "#9DBA8F",
 };
 
-const FALLBACK_IMAGES = [
-  "/images/proyectos/proyecto-1.webp",
-  "/images/proyectos/proyecto-2.webp",
-  "/images/proyectos/proyecto-3.webp",
-  "/images/proyectos/proyecto-4.webp",
-  "/images/proyectos/proyecto-5.webp",
-  "/images/proyectos/proyecto-6.webp",
-];
+const DEFAULT_PROJECT_FALLBACK = "/images/estudio/CASA-HA-DIA.webp";
 
 const WHATSAPP_URL = "https://wa.me/543415799316";
 
@@ -55,7 +48,7 @@ type ProjectCardProps = {
   categoryLabel: string;
   overlayLabel: string;
   isPriority?: boolean;
-  fallbackImage: string;
+  fallbackImage?: string;
 };
 
 function ProjectCard({
@@ -68,6 +61,10 @@ function ProjectCard({
   fallbackImage,
 }: ProjectCardProps) {
   const [src, setSrc] = useState(image);
+  const fallback =
+    fallbackImage && fallbackImage !== image
+      ? fallbackImage
+      : DEFAULT_PROJECT_FALLBACK;
   const badgeColor = CATEGORY_COLORS[categoryKey] ?? "#EAC64D";
 
   return (
@@ -84,8 +81,8 @@ function ProjectCard({
           priority={isPriority}
           className="object-cover transition duration-700 group-hover:scale-105"
           onError={() => {
-            if (src !== fallbackImage) {
-              setSrc(fallbackImage);
+            if (src !== fallback) {
+              setSrc(fallback);
             }
           }}
         />
@@ -111,6 +108,25 @@ function ProjectCard({
 export default function HomePage() {
   const [language, setLanguage] = useState<LocaleKey>("es");
   const copy = getCopy(language);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const storedLanguage = window.localStorage.getItem("jg-visual-lang");
+    if (storedLanguage === "es" || storedLanguage === "en") {
+      setLanguage(storedLanguage);
+    }
+  }, [setLanguage]);
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = language;
+    }
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("jg-visual-lang", language);
+    }
+  }, [language]);
 
   const services = useMemo(
     () =>
@@ -149,12 +165,9 @@ export default function HomePage() {
             muted
             loop
             playsInline
-            poster="/images/proyectos/proyecto-1.webp"
+            poster="/images/estudio/CASA-HA-DIA.webp"
             className="absolute inset-0 h-full w-full object-cover"
-          >
-            <source src="/videos/casa-ha.mp4" type="video/mp4" />
-            <source src="/images/estudio/hero-video.mp4" type="video/mp4" />
-          </video>
+          />
           <div className="absolute inset-0 bg-black/45" />
           <motion.div
             className="relative z-10 max-w-3xl px-6"
@@ -162,9 +175,9 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            <p className="text-xs font-semibold tracking-[0.4em] text-white/80">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
               {copy.hero.badge}
-            </p>
+            </h2>
             <h1 className="mt-5 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
               {copy.hero.title}
             </h1>
@@ -198,7 +211,7 @@ export default function HomePage() {
         </section>
 
         <motion.section
-          className="mx-auto max-w-6xl px-6 py-12"
+          className="mx-auto max-w-6xl px-6 py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
@@ -242,7 +255,7 @@ export default function HomePage() {
 
         <motion.section
           id="projects"
-          className="bg-[#f5f5f5] py-12"
+          className="bg-[#f5f5f5] py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
@@ -279,7 +292,11 @@ export default function HomePage() {
                     categoryLabel={categoryLabel}
                     overlayLabel={copy.projects.overlay}
                     isPriority={index === 0}
-                    fallbackImage={FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]}
+                    fallbackImage={
+                      project.image.includes("/en/")
+                        ? project.image.replace("/en/", "/")
+                        : undefined
+                    }
                   />
                 );
               })}
@@ -294,7 +311,7 @@ export default function HomePage() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-8 px-6 py-12 lg:flex-row">
+          <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-8 px-6 py-20 lg:flex-row">
             <motion.div
               className="w-full flex-1"
               variants={sectionVariants}
@@ -323,7 +340,7 @@ export default function HomePage() {
               variants={sectionVariants}
             >
               <Image
-                src="/images/proyectos/proyecto-5.webp"
+                src="/images/estudio/CASA-JJ-COCINA.webp"
                 alt="Render interior cálido del estudio"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
@@ -334,7 +351,7 @@ export default function HomePage() {
         </motion.section>
 
         <motion.section
-          className="mx-auto max-w-6xl px-6 py-12"
+          className="mx-auto max-w-6xl px-6 py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
@@ -372,7 +389,7 @@ export default function HomePage() {
         </motion.section>
 
         <motion.section
-          className="relative overflow-hidden bg-[#0a0a0a] py-12"
+          className="relative overflow-hidden bg-[#0a0a0a] py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
@@ -396,3 +413,8 @@ export default function HomePage() {
     </>
   );
 }
+
+
+
+
+
