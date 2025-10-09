@@ -1,6 +1,9 @@
-import Image from "next/image";
+import { promises as fs } from "fs";
+import path from "path";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { proyectos } from "@/data/proyectos";
+import ProjectGallery from "@/components/ProjectGallery";
 
 type ProyectoPageProps = {
   params: {
@@ -8,51 +11,136 @@ type ProyectoPageProps = {
   };
 };
 
-export default function ProyectoPage({ params }: ProyectoPageProps) {
+const SUPPORTED_EXTENSIONS = new Set([".webp", ".png", ".jpg", ".jpeg"]);
+
+type GlobFunction = <T = unknown>(
+  pattern: string,
+  options?: {
+    eager?: boolean;
+    import?: string;
+  },
+) => Record<string, T>;
+
+function getImagesFromGlob(slug: string): string[] {
+  const globFn = (import.meta as unknown as { glob?: GlobFunction }).glob;
+  if (typeof globFn !== "function") {
+    return [];
+  }
+
+  try {
+    const modules = globFn(
+      `/public/images/proyectos/${slug}-*.{webp,png,jpg,jpeg}`,
+      {
+        eager: true,
+        import: "default",
+      },
+    ) as Record<string, string>;
+
+    return Object.entries(modules)
+      .map(([filePath, modulePath]) => {
+        const normalized =
+          typeof modulePath === "string"
+            ? modulePath
+            : filePath.replace(/^.*\/public/, "");
+        return normalized.startsWith("/") ? normalized : `/${normalized}`;
+      })
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  } catch {
+    return [];
+  }
+}
+
+async function getImagesFromFs(slug: string) {
+  const directory = path.join(process.cwd(), "public", "images", "proyectos");
+
+  try {
+    const entries = await fs.readdir(directory, { withFileTypes: true });
+    return entries
+      .filter((entry) => entry.isFile())
+      .map((entry) => entry.name)
+      .filter((fileName) => {
+        if (!fileName.startsWith(`${slug}-`)) {
+          return false;
+        }
+        const extension = fileName
+          .slice(fileName.lastIndexOf("."))
+          .toLowerCase();
+        return SUPPORTED_EXTENSIONS.has(extension);
+      })
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+      .map((fileName) => `/images/proyectos/${fileName}`);
+  } catch {
+    return [];
+  }
+}
+
+async function getProjectImages(slug: string) {
+  const globImages = getImagesFromGlob(slug);
+  if (globImages.length > 0) {
+    return globImages;
+  }
+  return getImagesFromFs(slug);
+}
+
+export default async function ProyectoPage({ params }: ProyectoPageProps) {
   const proyecto = proyectos.find((item) => item.slug === params.slug);
 
   if (!proyecto) {
     notFound();
   }
 
+  const dynamicImages = await getProjectImages(proyecto.slug);
+  const galleryImages =
+    dynamicImages.length > 0 ? dynamicImages : proyecto.imagenes ?? [];
+  const showPlaceholder = galleryImages.length === 0;
+
   return (
-    <section className="max-w-5xl px-4 py-20 md:px-0 lg:py-24 mx-auto">
-      <h1 className="text-4xl font-bold text-neutral-900 mb-2">
+    <section className="mx-auto max-w-5xl px-4 py-20 md:px-0 lg:py-24">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-2 text-sm font-medium text-[#1b4332] transition hover:text-[#2d6a4f]"
+      >
+        <span aria-hidden>←</span>
+        Volver al inicio
+      </Link>
+
+      <h1 className="mt-6 text-4xl font-bold text-neutral-900">
         {proyecto.nombre}
       </h1>
-      <p className="mb-6 text-sm font-semibold uppercase tracking-[0.35em] text-[#1b4332]">
+      <p className="mt-2 text-sm font-semibold uppercase tracking-[0.35em] text-[#1b4332]">
         {proyecto.tipo}
       </p>
-      <p className="mb-10 text-lg leading-relaxed text-neutral-700">
+      <p className="mt-8 text-lg leading-relaxed text-neutral-700">
         {proyecto.descripcion}
       </p>
 
-      <h2 className="text-2xl font-semibold text-neutral-900 mb-4">
+      <h2 className="mt-12 text-2xl font-semibold text-neutral-900">
         Contexto y objetivo del proyecto
       </h2>
-      <p className="mb-12 text-neutral-700 leading-relaxed">
-        Este trabajo fue desarrollado en colaboración con el cliente, buscando
-        resaltar la esencia material y la relación entre luz, textura y función.
-        Cada render fue pensado para transmitir sensaciones espaciales,
-        destacando la coherencia entre concepto arquitectónico y experiencia
-        visual.
+      <p className="mt-4 text-neutral-700 leading-relaxed">
+        Este trabajo se desarrolló junto al cliente para potenciar la intención
+        arquitectónica, cuidando la lectura de materiales, la incidencia de la
+        luz y la experiencia espacial en cada imagen generada.
       </p>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        {proyecto.imagenes.map((imagen, index) => (
-          <div
-            key={imagen}
-            className="relative aspect-[4/3] overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100"
-          >
-            <Image
-              src={imagen}
-              alt={`${proyecto.nombre} imagen ${index + 1}`}
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition-transform duration-700 hover:scale-105"
-            />
-          </div>
-        ))}
+      {showPlaceholder ? (
+        <p className="mt-12 rounded-xl border border-dashed border-neutral-300 p-8 text-center text-neutral-500">
+          Imágenes en preparación.
+        </p>
+      ) : (
+        <div className="mt-12">
+          <ProjectGallery images={galleryImages} projectName={proyecto.nombre} />
+        </div>
+      )}
+
+      <div className="mt-12 flex justify-center">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#2d6a4f]"
+        >
+          <span aria-hidden>←</span>
+          Volver al inicio
+        </Link>
       </div>
     </section>
   );

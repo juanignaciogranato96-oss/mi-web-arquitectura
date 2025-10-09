@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FaWhatsapp } from "react-icons/fa";
 import type { LocaleKey } from "@/locales";
 
 type HeaderLabels = {
@@ -55,9 +56,10 @@ export function Header({
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-[#1b4332] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-[#2d6a4f]"
+            className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-black/20 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f]"
           >
-            {labels.whatsapp}
+            <FaWhatsapp className="h-3.5 w-3.5" aria-hidden />
+            <span>{labels.whatsapp}</span>
           </Link>
         </nav>
         <div className="flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">

@@ -12,6 +12,7 @@ import {
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import Hero from "@/components/Hero";
+import ProcesoTrabajo from "@/components/ProcesoTrabajo";
 import Testimonios from "@/components/Testimonios";
 import { proyectos } from "@/data/proyectos";
 import type { Proyecto } from "@/data/proyectos";
@@ -259,6 +260,15 @@ export default function HomePage() {
         </motion.section>
 
         <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <ProcesoTrabajo />
+        </motion.section>
+
+        <motion.section
           id="projects"
           className="bg-[#f5f5f5] py-20"
           variants={sectionVariants}
@@ -308,9 +318,9 @@ export default function HomePage() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-8 px-6 py-20 lg:flex-row">
+          <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr]">
             <motion.div
-              className="w-full flex-1"
+              className="w-full"
               variants={sectionVariants}
               initial="hidden"
               whileInView="visible"
@@ -333,16 +343,19 @@ export default function HomePage() {
               </div>
             </motion.div>
             <motion.div
-              className="relative h-[360px] w-full flex-1 overflow-hidden rounded-3xl border border-neutral-200 shadow-lg shadow-neutral-900/10"
+              className="relative w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg shadow-neutral-900/10"
               variants={sectionVariants}
             >
-              <Image
-                src="/images/estudio/CASA-JJ-COCINA.webp"
-                alt="Render interior cálido del estudio"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
+              <div className="relative aspect-[4/5] w-full">
+                <Image
+                  src="/images/team/juan-granato.webp"
+                  alt="Juan Granato"
+                  fill
+                  sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 100vw"
+                  className="object-cover filter grayscale"
+                  priority
+                />
+              </div>
             </motion.div>
           </div>
         </motion.section>

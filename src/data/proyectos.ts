@@ -1,3 +1,5 @@
+const PROJECTS_BASE = "/images/proyectos";
+
 export type Proyecto = {
   slug: string;
   nombre: string;
@@ -8,6 +10,13 @@ export type Proyecto = {
   descripcion: string;
 };
 
+function buildProjectImages(slug: string, total = 3) {
+  return Array.from({ length: total }, (_, index) => {
+    const suffix = `${index + 1}`.padStart(2, "0");
+    return `${PROJECTS_BASE}/${slug}-${suffix}.webp`;
+  });
+}
+
 export const proyectos: Proyecto[] = [
   {
     slug: "cafe-chilin",
@@ -15,13 +24,9 @@ export const proyectos: Proyecto[] = [
     tipo: "Comercial",
     categoria: "commercial",
     portada: "/images/estudio/cafe-chilin-portada.webp",
-    imagenes: [
-      "/images/proyectos/cafe-chilin/01.webp",
-      "/images/proyectos/cafe-chilin/02.webp",
-      "/images/proyectos/cafe-chilin/03.webp",
-    ],
+    imagenes: buildProjectImages("cafe-chilin"),
     descripcion:
-      "Serie de renders interiores que transmiten la identidad cálida del café, resaltando maderas naturales, contrastes de luz y una atmósfera pensada para el encuentro urbano.",
+      "Desarrollamos una narrativa visual que resalta la calidez de Café Chilin: maderas tostadas, cielorrasos oscuros y lámparas puntuales que realzan la barra y el área de degustación. Las imágenes muestran cómo la iluminación rasante se combina con el mobiliario de hierro para crear un ambiente íntimo, ideal para reuniones y flujo comercial. Cada vista se enfocó en transmitir aromas, texturas y la impronta urbana del local, reforzando el branding del emprendimiento.",
   },
   {
     slug: "casa-hormigon",
@@ -29,27 +34,19 @@ export const proyectos: Proyecto[] = [
     tipo: "Residencial",
     categoria: "residential",
     portada: "/images/estudio/casa-hormigon-portada.webp",
-    imagenes: [
-      "/images/proyectos/casa-hormigon/01.webp",
-      "/images/proyectos/casa-hormigon/02.webp",
-      "/images/proyectos/casa-hormigon/03.webp",
-    ],
+    imagenes: buildProjectImages("casa-hormigon"),
     descripcion:
-      "Visualizaciones que exploran un volumen de hormigón visto integrado al verde. Cada escena trabaja la escala humana, los reflejos y la continuidad entre interior y paisaje.",
+      "Las escenas de Casa Hormigón trabajan la contundencia del volumen en hormigón visto en relación con patios verdes y carpinterías de piso a techo. El render exterior enfatiza planos superpuestos y el reflejo del agua que suaviza el material. En los interiores se acentúa la continuidad espacial, los contrastes entre superficies pulidas y textiles cálidos, y el modo en que la luz natural perfila cada ambiente de la vivienda.",
   },
   {
     slug: "casa-teros",
-    nombre: "Cocina Casa Teros",
+    nombre: "Casa Teros",
     tipo: "Residencial",
     categoria: "residential",
     portada: "/images/estudio/casa-teros-portada.webp",
-    imagenes: [
-      "/images/proyectos/casa-teros/01.webp",
-      "/images/proyectos/casa-teros/02.webp",
-      "/images/proyectos/casa-teros/03.webp",
-    ],
+    imagenes: buildProjectImages("casa-teros"),
     descripcion:
-      "Renders que ponen en valor la cocina como núcleo social de la vivienda, combinando texturas nobles, iluminación cálida y soluciones funcionales para la vida cotidiana.",
+      "Para la cocina de Casa Teros mostramos el corazón social de la vivienda con una isla protagonista, equipamiento a medida y una paleta que combina madera natural, superficies mate y detalles en piedra. Los renders destacan la relación interior-exterior, la iluminación puntual sobre la barra de desayuno y los aportes de vegetación que acompañan la vida diaria. La serie refuerza la idea de un espacio familiar, flexible y preparado para recibir.",
   },
   {
     slug: "departamento-nexus",
@@ -57,13 +54,9 @@ export const proyectos: Proyecto[] = [
     tipo: "Residencial",
     categoria: "residential",
     portada: "/images/estudio/casa-nexus-portada.webp",
-    imagenes: [
-      "/images/proyectos/departamento-nexus/01.webp",
-      "/images/proyectos/departamento-nexus/02.webp",
-      "/images/proyectos/departamento-nexus/03.webp",
-    ],
+    imagenes: buildProjectImages("departamento-nexus"),
     descripcion:
-      "Colección de vistas que refuerzan la amplitud, la luz y la versatilidad del departamento, orientadas a inversores y futuros usuarios de desarrollos urbanos contemporáneos.",
+      "El Departamento Nexus se concibió con una estética sobria pensada para desarrolladoras e inversores. Las imágenes muestran ambientes integrados, carpinterías corredizas que abren el estar hacia el exterior y un diseño interior basado en neutros cálidos, acentos en madera y luminarias lineales. Cada toma evidencia versatilidad programática y el estándar de terminaciones que posiciona al proyecto dentro del segmento premium.",
   },
   {
     slug: "casa-kai",
@@ -71,13 +64,9 @@ export const proyectos: Proyecto[] = [
     tipo: "Residencial",
     categoria: "residential",
     portada: "/images/estudio/casa-kai-portada.webp",
-    imagenes: [
-      "/images/proyectos/casa-kai/01.webp",
-      "/images/proyectos/casa-kai/02.webp",
-      "/images/proyectos/casa-kai/03.webp",
-    ],
+    imagenes: buildProjectImages("casa-kai"),
     descripcion:
-      "Visualizaciones que articulan interior y exterior a través de carpinterías generosas, reflejando el equilibrio entre materiales naturales y una atmósfera serena.",
+      "Casa Kai se presenta como un refugio contemporáneo que se abre al jardín mediante paños vidriados y pérgolas ligeras. El render exterior enfatiza planos de hormigón, pieles de madera y una pileta lineal que refleja la vivienda. Las vistas interiores explican cómo se articulan los espacios comunes con dobles alturas y mobiliario a medida, generando una atmósfera serena, luminosa y conectada con la naturaleza.",
   },
   {
     slug: "local-glam",
@@ -85,12 +74,8 @@ export const proyectos: Proyecto[] = [
     tipo: "Comercial",
     categoria: "commercial",
     portada: "/images/estudio/local-glam-portada.webp",
-    imagenes: [
-      "/images/proyectos/local-glam/01.webp",
-      "/images/proyectos/local-glam/02.webp",
-      "/images/proyectos/local-glam/03.webp",
-    ],
+    imagenes: buildProjectImages("local-glam"),
     descripcion:
-      "Renders comerciales que enfatizan la iluminación escenográfica y la atmósfera sofisticada para posicionar la marca desde la primera impresión.",
+      "Las visualizaciones de Local Glam trabajan un concepto de retail sofisticado, basado en estanterías curvas, espejos retroiluminados y materiales metálicos que realzan cada producto. Las escenas describen la circulación fluida entre exhibidores, el efecto de la iluminación escenográfica y la identidad gráfica integrada al espacio. El resultado transmite exclusividad y refuerza el posicionamiento comercial de la marca.",
   },
 ];

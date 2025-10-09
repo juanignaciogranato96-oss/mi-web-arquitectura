@@ -1,6 +1,17 @@
+import Link from "next/link";
+
+const backLinkClass =
+  "inline-flex items-center gap-2 text-sm font-medium text-neutral-700 transition hover:text-[#1b4332]";
+const backLinkButtonClass =
+  "inline-flex items-center justify-center gap-2 rounded-full border border-neutral-300 px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:border-[#1b4332] hover:text-[#1b4332]";
+
 export default function PresupuestoPage() {
   return (
     <section className="max-w-lg mx-auto py-16 px-6">
+      <Link href="/" className={backLinkClass}>
+        <span aria-hidden>←</span>
+        Volver al inicio
+      </Link>
       <h1 className="text-3xl font-bold text-center text-neutral-900 sm:text-4xl">
         Solicitar presupuesto
       </h1>
@@ -77,6 +88,12 @@ export default function PresupuestoPage() {
           Enviar solicitud
         </button>
       </form>
+      <div className="mt-12 flex justify-center">
+        <Link href="/" className={backLinkButtonClass}>
+          <span aria-hidden>←</span>
+          Volver al inicio
+        </Link>
+      </div>
     </section>
   );
 }

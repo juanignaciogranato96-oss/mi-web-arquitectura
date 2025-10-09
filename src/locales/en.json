@@ -6,7 +6,7 @@
     "buttons": {
       "projects": "View projects",
       "quote": "Request a quote",
-      "whatsapp": "WhatsApp"
+      "whatsapp": "Contactarte"
     }
   },
   "services": {
@@ -44,7 +44,7 @@
       },
       {
         "slug": "casa-teros",
-        "name": "Teros House Kitchen",
+        "name": "Casa Teros",
         "type": "Residential"
       },
       {
@@ -104,7 +104,7 @@
     "logo": "JG VISUAL STUDIO",
     "projects": "View projects",
     "quote": "Request a quote",
-    "whatsapp": "WhatsApp"
+    "whatsapp": "Contactarte"
   },
   "footer": {
     "heading": "JG VISUAL STUDIO",
