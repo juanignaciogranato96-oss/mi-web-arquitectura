@@ -4,6 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 import {
   CubeTransparentIcon,
   BuildingOffice2Icon,
@@ -188,6 +192,21 @@ export default function HomePage() {
       };
     });
   }, [copy.projects.items, copy.projects.categories]);
+  const approachSlides = useMemo(
+    () => [
+      {
+        src: "/images/team/juan-granato.webp",
+        className: "object-cover filter grayscale",
+        priority: true,
+      },
+      {
+        src: "/images/team/juan-granato-2.webp",
+        className: "object-cover filter grayscale object-top",
+        priority: false,
+      },
+    ],
+    [],
+  );
 
   const handleProjectsClick = useCallback(() => {
     const target = document.getElementById("projects");
@@ -343,18 +362,33 @@ export default function HomePage() {
               </div>
             </motion.div>
             <motion.div
-              className="relative w-full overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg shadow-neutral-900/10"
+              className="w-full flex justify-center lg:justify-end"
               variants={sectionVariants}
             >
-              <div className="relative aspect-[4/5] w-full">
-                <Image
-                  src="/images/team/juan-granato.webp"
-                  alt="Juan Granato"
-                  fill
-                  sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 100vw"
-                  className="object-cover filter grayscale"
-                  priority
-                />
+              <div className="w-full max-w-xl">
+              <Swiper
+                modules={[Autoplay, Pagination]}
+                slidesPerView={1}
+                loop
+                autoplay={{ delay: 5000, disableOnInteraction: false }}
+                pagination={{ clickable: true }}
+                className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg shadow-neutral-900/10"
+              >
+                {approachSlides.map((slide) => (
+                  <SwiperSlide key={slide.src}>
+                    <div className="relative aspect-[4/5] w-full overflow-hidden">
+                      <Image
+                        src={slide.src}
+                        alt="Juan Granato"
+                        fill
+                        sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 100vw"
+                        className={slide.className}
+                        priority={slide.priority}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
               </div>
             </motion.div>
           </div>
