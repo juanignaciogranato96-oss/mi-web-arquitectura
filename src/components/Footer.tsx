@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ReactElement } from "react";
 
 type FooterLabels = {
   heading: string;
@@ -19,7 +20,7 @@ type FooterProps = {
 const SOCIALS: Array<{
   href: string;
   key: SocialKey;
-  icon: JSX.Element;
+  icon: ReactElement;
 }> = [
   {
     href: "https://instagram.com/jg_archviz",
