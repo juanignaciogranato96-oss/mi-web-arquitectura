@@ -33,13 +33,13 @@ export default function ProjectGallery({
     >
       {images.map((imageSrc, index) => (
         <SwiperSlide key={imageSrc}>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-neutral-200">
+          <div className="relative flex min-h-[260px] items-center justify-center overflow-hidden rounded-2xl bg-neutral-100 sm:min-h-[360px] lg:min-h-[480px]">
             <Image
               src={imageSrc}
               alt={`${projectName} imagen ${index + 1}`}
               fill
-              sizes="(min-width: 1024px) 60vw, 100vw"
-              className="object-cover"
+              sizes="(min-width: 1280px) 900px, (min-width: 768px) 80vw, 100vw"
+              className="object-contain"
             />
           </div>
         </SwiperSlide>

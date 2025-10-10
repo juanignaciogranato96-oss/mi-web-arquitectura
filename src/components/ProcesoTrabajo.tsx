@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PROCESO_PASOS = [
   {
@@ -43,6 +43,20 @@ const PROCESO_PASOS = [
 
 export default function ProcesoTrabajo() {
   const [activeStep, setActiveStep] = useState<number>(PROCESO_PASOS[0].id);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setActiveStep((prev) => {
+        const currentIndex = PROCESO_PASOS.findIndex((step) => step.id === prev);
+        const nextIndex = (currentIndex + 1) % PROCESO_PASOS.length;
+        return PROCESO_PASOS[nextIndex].id;
+      });
+    }, 5000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   const activeData =
     PROCESO_PASOS.find((item) => item.id === activeStep) ?? PROCESO_PASOS[0];

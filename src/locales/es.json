@@ -2,7 +2,7 @@
   "hero": {
     "badge": "JG VISUAL ESTUDIO · DIRIGIDO POR EL ARQ. JUAN GRANATO",
     "title": "Diseñamos y visualizamos arquitectura que se vive.",
-    "subtitle": "Renders, diseño y regularización de obra en Rosario y Funes.",
+    "subtitle": "",
     "buttons": {
       "projects": "Ver proyectos",
       "quote": "Solicitar presupuesto",
@@ -23,7 +23,7 @@
       },
       {
         "title": "Regularización de obra",
-        "description": "Gestión técnica y documental en Rosario y Funes con seguimiento cercano."
+        "description": "Gestión técnica y documental en Rosario y alrededores con seguimiento cercano."
       }
     ]
   },
@@ -90,7 +90,7 @@
         "role": "Constructora RFX"
       },
       {
-        "quote": "Cumple plazos exigentes sin resignar precisión y es nuestro aliado para regularizaciones en Rosario y Funes.",
+        "quote": "Cumple plazos exigentes sin resignar precisión y es nuestro aliado para regularizaciones en Rosario.",
         "author": "Dra. Valentina Cano",
         "role": "Desarrolladora inmobiliaria"
       }
@@ -108,7 +108,7 @@
   },
   "footer": {
     "heading": "JG VISUAL ESTUDIO",
-    "location": "Rosario · Funes",
+    "location": "Rosario, Argentina",
     "phone": "Tel: 0341 5799316",
     "email": "juanignaciogranato96@hotmail.com",
     "rights": "2025 JG Visual Estudio - Todos los derechos reservados",

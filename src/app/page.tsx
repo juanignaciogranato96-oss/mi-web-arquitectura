@@ -50,6 +50,12 @@ const SERVICE_ICONS = [
   ClipboardDocumentCheckIcon,
 ] as const;
 
+const SERVICE_ROUTES = [
+  "/servicios/render-3d",
+  "/servicios/diseno-arquitectonico-integral",
+  "/servicios/regularizacion-de-obra",
+] as const;
+
 type CopyContent = ReturnType<typeof getCopy>;
 type ProjectCopyItem = CopyContent["projects"]["items"][number];
 
@@ -163,6 +169,7 @@ export default function HomePage() {
       copy.services.items.map((service, index) => ({
         ...service,
         Icon: SERVICE_ICONS[index],
+        href: SERVICE_ROUTES[index] ?? "/servicios",
       })),
     [copy.services.items],
   );
@@ -260,19 +267,26 @@ export default function HomePage() {
             {services.map((service) => {
               const Icon = service.Icon ?? CubeTransparentIcon;
               return (
-                <motion.article
+                <motion.div
                   key={service.title}
                   variants={sectionVariants}
-                  className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/10"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1b4332] text-white shadow-lg shadow-[#1b4332]/30">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-6 text-xl font-semibold text-neutral-900">
-                    {service.title}
-                  </h3>
-                  <p className="mt-3 text-sm text-neutral-600">{service.description}</p>
-                </motion.article>
+                  <Link
+                    href={service.href}
+                    className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
+                    aria-label={`Ver servicio ${service.title}`}
+                  >
+                    <article className="h-full rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm transition transform group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-neutral-900/10">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1b4332] text-white shadow-lg shadow-[#1b4332]/30">
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <h3 className="mt-6 text-xl font-semibold text-neutral-900">
+                        {service.title}
+                      </h3>
+                      <p className="mt-3 text-sm text-neutral-600">{service.description}</p>
+                    </article>
+                  </Link>
+                </motion.div>
               );
             })}
           </motion.div>

@@ -41,6 +41,7 @@ export default function Hero({
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const hasSubtitle = subtitle.trim().length > 0;
 
   const videos = useMemo(() => HERO_VIDEOS, []);
 
@@ -211,7 +212,9 @@ export default function Hero({
         <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
           {title}
         </h1>
-        <p className="mt-4 text-lg text-neutral-200 sm:text-xl">{subtitle}</p>
+        {hasSubtitle ? (
+          <p className="mt-4 text-lg text-neutral-200 sm:text-xl">{subtitle}</p>
+        ) : null}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <a
             href="#projects"

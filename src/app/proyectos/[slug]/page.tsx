@@ -100,7 +100,7 @@ export default async function ProyectoPage({ params }: ProyectoPageProps) {
         href="/"
         className="inline-flex items-center gap-2 text-sm font-medium text-[#1b4332] transition hover:text-[#2d6a4f]"
       >
-        <span aria-hidden>←</span>
+        <span aria-hidden="true">←</span>
         Volver al inicio
       </Link>
 
@@ -117,7 +117,7 @@ export default async function ProyectoPage({ params }: ProyectoPageProps) {
       <h2 className="mt-12 text-2xl font-semibold text-neutral-900">
         Contexto y objetivo del proyecto
       </h2>
-      <p className="mt-4 text-neutral-700 leading-relaxed">
+      <p className="mt-4 leading-relaxed text-neutral-700">
         Este trabajo se desarrolló junto al cliente para potenciar la intención
         arquitectónica, cuidando la lectura de materiales, la incidencia de la
         luz y la experiencia espacial en cada imagen generada.
@@ -138,7 +138,7 @@ export default async function ProyectoPage({ params }: ProyectoPageProps) {
           href="/"
           className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#2d6a4f]"
         >
-          <span aria-hidden>←</span>
+          <span aria-hidden="true">←</span>
           Volver al inicio
         </Link>
       </div>

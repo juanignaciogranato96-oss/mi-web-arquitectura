@@ -2,11 +2,11 @@
   "hero": {
     "badge": "JG VISUAL STUDIO · LED BY ARCH. JUAN GRANATO",
     "title": "We design and visualize architecture you can feel.",
-    "subtitle": "Renderings, design and permitting services in Rosario and Funes.",
+    "subtitle": "",
     "buttons": {
       "projects": "View projects",
       "quote": "Request a quote",
-      "whatsapp": "Contactarte"
+      "whatsapp": "Contact us"
     }
   },
   "services": {
@@ -23,7 +23,7 @@
       },
       {
         "title": "Building regularization",
-        "description": "Technical and paperwork management in Rosario and Funes with close follow-up."
+        "description": "Technical and paperwork management in Rosario and surrounding areas with close follow-up."
       }
     ]
   },
@@ -90,7 +90,7 @@
         "role": "RFX Construction"
       },
       {
-        "quote": "He meets demanding timelines without sacrificing precision and is our partner for permitting in Rosario and Funes.",
+        "quote": "He meets demanding timelines without sacrificing precision and is our partner for permitting in Rosario.",
         "author": "Dr. Valentina Cano",
         "role": "Real estate developer"
       }
@@ -104,11 +104,11 @@
     "logo": "JG VISUAL STUDIO",
     "projects": "View projects",
     "quote": "Request a quote",
-    "whatsapp": "Contactarte"
+    "whatsapp": "Contact us"
   },
   "footer": {
     "heading": "JG VISUAL STUDIO",
-    "location": "Rosario • Funes",
+    "location": "Rosario, Argentina",
     "phone": "Tel: +54 9 341 5799316",
     "email": "juanignaciogranato96@hotmail.com",
     "rights": "2025 JG Visual Studio - All rights reserved",

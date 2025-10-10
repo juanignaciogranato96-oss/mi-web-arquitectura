@@ -15,7 +15,7 @@ const WHATSAPP_URL = "https://wa.me/543415799316";
 export const metadata: Metadata = {
   title: "JG Visual Estudio",
   description:
-    "Diseño arquitectónico, renders y regularización de obra en Rosario y Funes.",
+    "Diseño arquitectónico, renders y regularización de obra en Rosario.",
 };
 
 export default function RootLayout({

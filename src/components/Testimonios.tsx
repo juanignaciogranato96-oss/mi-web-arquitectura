@@ -21,7 +21,7 @@ const testimonios = [
     autor: "Dra. Valentina Cano",
     cargo: "Desarrolladora inmobiliaria",
     texto:
-      "Cumple plazos exigentes sin resignar precisión y es nuestro aliado para regularizaciones en Rosario y Funes.",
+      "Cumple plazos exigentes sin resignar precisión y es nuestro aliado para regularizaciones en Rosario.",
   },
   {
     autor: "Arq. Esteban Gutiérrez",
