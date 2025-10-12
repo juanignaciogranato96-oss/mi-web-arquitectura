@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body
+        suppressHydrationWarning
         className={`${plusJakarta.variable} bg-neutral-100 font-sans text-neutral-900 antialiased`}
       >
         <div className="flex min-h-screen flex-col">{children}</div>
