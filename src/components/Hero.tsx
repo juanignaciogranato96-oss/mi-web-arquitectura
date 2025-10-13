@@ -175,7 +175,7 @@ export default function Hero({
   };
 
   return (
-    <section className="relative flex h-screen w-full items-center justify-center overflow-hidden text-center text-white">
+    <section className="relative flex w-full items-center justify-center overflow-hidden bg-black text-center text-white min-h-[520px] sm:min-h-[600px] lg:min-h-[720px]">
       {videos.map((videoSrc, index) => (
         <video
           key={videoSrc}
@@ -201,31 +201,33 @@ export default function Hero({
       />
 
       <motion.div
-        className="relative z-10 max-w-3xl px-6"
+        className="relative z-10 w-full max-w-screen-lg px-4 py-12 sm:px-6 sm:py-16 md:px-8 md:py-20"
         initial={{ opacity: 0, y: 36 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
       >
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/80 sm:text-sm">
           {badge}
         </h2>
-        <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+        <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
           {title}
         </h1>
         {hasSubtitle ? (
-          <p className="mt-4 text-lg text-neutral-200 sm:text-xl">{subtitle}</p>
+          <p className="mt-4 text-base text-neutral-200 sm:text-lg md:text-xl">
+            {subtitle}
+          </p>
         ) : null}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
           <a
             href="#projects"
             onClick={handleProjectsClick}
-            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-200"
+            className="w-full rounded-full bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-200 sm:w-auto sm:px-6 sm:py-3"
           >
             {buttons.projects}
           </a>
           <Link
             href="/presupuesto"
-            className="rounded-full bg-neutral-800 px-5 py-2 text-sm font-semibold text-white transition hover:bg-neutral-700"
+            className="w-full rounded-full bg-neutral-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-700 sm:w-auto sm:px-6 sm:py-3"
           >
             {buttons.quote}
           </Link>
@@ -233,7 +235,7 @@ export default function Hero({
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-[#1b4332]/30 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#1b4332]/30 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f] sm:w-auto sm:px-6 sm:py-3"
           >
             <FaWhatsapp className="h-4 w-4" aria-hidden />
             <span>{buttons.whatsapp}</span>

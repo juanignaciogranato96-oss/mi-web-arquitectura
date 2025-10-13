@@ -62,14 +62,16 @@ export default function ProcesoTrabajo() {
     PROCESO_PASOS.find((item) => item.id === activeStep) ?? PROCESO_PASOS[0];
 
   return (
-    <section className="bg-neutral-50 py-20">
-      <div className="mx-auto max-w-5xl px-4 text-center">
-        <h2 className="text-3xl font-bold text-neutral-900">Proceso de trabajo</h2>
-        <p className="mt-2 text-neutral-600">
+    <section className="bg-neutral-50 py-12 sm:py-16 md:py-20">
+      <div className="mx-auto w-full max-w-screen-lg px-4 text-center sm:px-6 md:px-8">
+        <h2 className="text-3xl font-bold text-neutral-900 sm:text-4xl md:text-5xl">
+          Proceso de trabajo
+        </h2>
+        <p className="mt-3 text-base text-neutral-600 sm:text-lg">
           Conocé cómo articulamos cada etapa junto a tu equipo.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           {PROCESO_PASOS.map((step) => {
             const isActive = step.id === activeStep;
             return (
@@ -90,11 +92,13 @@ export default function ProcesoTrabajo() {
           })}
         </div>
 
-        <div className="mx-auto mt-10 max-w-3xl rounded-xl border border-neutral-200 bg-white p-8 text-left shadow-sm transition-all duration-300">
-          <h3 className="text-lg font-semibold text-neutral-900">
+        <div className="mx-auto mt-10 max-w-3xl rounded-2xl border border-neutral-200 bg-white p-6 text-left shadow-sm transition-all duration-300 sm:p-8">
+          <h3 className="text-lg font-semibold text-neutral-900 sm:text-xl">
             {activeData.title}
           </h3>
-          <p className="mt-3 text-neutral-600">{activeData.description}</p>
+          <p className="mt-3 text-sm text-neutral-600 sm:text-base">
+            {activeData.description}
+          </p>
         </div>
       </div>
     </section>

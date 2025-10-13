@@ -66,21 +66,21 @@ const SOCIALS: Array<{
 export function Footer({ labels }: FooterProps) {
   return (
     <footer className="bg-[#0a0a0a] text-[#f1f1f1]">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-20 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-2 text-sm">
-          <p className="text-base font-semibold uppercase tracking-[0.2em] text-white">
+      <div className="mx-auto flex w-full max-w-screen-xl flex-col items-center gap-8 px-4 py-12 text-center sm:px-6 sm:py-16 md:flex-row md:items-start md:justify-between md:px-8 md:py-20 md:text-left">
+        <div className="space-y-2 text-sm sm:text-base">
+          <p className="text-base font-semibold uppercase tracking-[0.2em] text-white sm:text-lg">
             {labels.heading}
           </p>
-          <p>{labels.location}</p>
-          <p>{labels.phone}</p>
+          <p className="text-sm sm:text-base">{labels.location}</p>
+          <p className="text-sm sm:text-base">{labels.phone}</p>
           <Link
             href={`mailto:${labels.email}`}
-            className="transition-colors hover:text-[#C2A85F]"
+            className="text-sm transition-colors hover:text-[#C2A85F] sm:text-base"
           >
             {labels.email}
           </Link>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap justify-center gap-4 md:justify-end">
           {SOCIALS.map((item) => (
             <Link
               key={item.key}
@@ -95,7 +95,7 @@ export function Footer({ labels }: FooterProps) {
           ))}
         </div>
       </div>
-      <p className="border-t border-white/10 px-6 py-6 text-center text-xs text-[#d0d0d0]">
+      <p className="border-t border-white/10 px-4 py-6 text-center text-xs text-[#d0d0d0] sm:px-6 md:px-8">
         {labels.rights}
       </p>
     </footer>

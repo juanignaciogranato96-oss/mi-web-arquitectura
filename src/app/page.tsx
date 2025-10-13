@@ -101,20 +101,20 @@ function ProjectCard({
     <Link
       href={`/proyectos/${slug}`}
       aria-label={`${overlayLabel} ${name}`}
-      className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
+      className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
     >
       <motion.figure
-        className="group relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
+        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
         variants={sectionVariants}
       >
-        <div className="relative h-60 overflow-hidden">
+        <div className="relative h-64 w-full overflow-hidden rounded-2xl sm:h-72 lg:h-80">
           <Image
             src={src}
             alt={name}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             priority={isPriority}
-            className="object-cover transition duration-700 group-hover:scale-105"
+            className="h-full w-full rounded-2xl object-cover transition duration-700 group-hover:scale-105"
             onError={() => {
               if (src !== fallback) {
                 setSrc(fallback);
@@ -127,8 +127,10 @@ function ProjectCard({
             </span>
           </div>
         </div>
-        <figcaption className="flex items-center justify-between px-5 py-4">
-          <p className="text-sm font-semibold text-neutral-900">{name}</p>
+        <figcaption className="flex items-center justify-between px-6 py-5">
+          <p className="text-base font-semibold text-neutral-900 sm:text-lg">
+            {name}
+          </p>
           <span
             className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]"
             style={{ backgroundColor: badgeColor, color: "#0a0a0a" }}
@@ -144,6 +146,7 @@ function ProjectCard({
 export default function HomePage() {
   const [language, setLanguage] = useState<LocaleKey>("es");
   const copy = getCopy(language);
+  const [approachSlideIndex, setApproachSlideIndex] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -199,21 +202,70 @@ export default function HomePage() {
       };
     });
   }, [copy.projects.items, copy.projects.categories]);
+  const approachHighlights = copy.approach.highlights ?? [];
   const approachSlides = useMemo(
-    () => [
-      {
-        src: "/images/team/juan-granato.webp",
-        className: "object-cover filter grayscale",
-        priority: true,
-      },
-      {
-        src: "/images/team/juan-granato-2.webp",
-        className: "object-cover filter grayscale object-top",
-        priority: false,
-      },
-    ],
-    [],
+    () => {
+      const baseSlides = [
+        {
+          src: "/images/team/1.webp",
+          className: "filter grayscale",
+          priority: true,
+        },
+        {
+          src: "/images/team/2.webp",
+          className: "filter grayscale",
+          priority: false,
+        },
+        {
+          src: "/images/team/3.webp",
+          className: "filter grayscale",
+          priority: false,
+        },
+        {
+          src: "/images/team/4.webp",
+          className: "filter grayscale",
+          priority: false,
+        },
+        {
+          src: "/images/team/5.webp",
+          className: "filter grayscale",
+          priority: false,
+        },
+        {
+          src: "/images/team/6.webp",
+          className: "filter grayscale",
+          priority: false,
+        },
+        {
+          src: "/images/team/7.webp",
+          className: "filter grayscale",
+          priority: false,
+        },
+      ];
+
+      if (approachHighlights.length === 0) {
+        return baseSlides.map((slide) => ({
+          ...slide,
+          message: "",
+        }));
+      }
+
+      return baseSlides.map((slide, index) => ({
+        ...slide,
+        message:
+          approachHighlights[index] ??
+          approachHighlights[index % approachHighlights.length],
+      }));
+    },
+    [approachHighlights],
   );
+  const currentApproachSlide =
+    approachSlides[approachSlideIndex % approachSlides.length] ??
+    approachSlides[0];
+  const currentApproachMessage =
+    currentApproachSlide && currentApproachSlide.message
+      ? currentApproachSlide.message
+      : copy.approach.quote;
 
   const handleProjectsClick = useCallback(() => {
     const target = document.getElementById("projects");
@@ -221,6 +273,10 @@ export default function HomePage() {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, []);
+
+  useEffect(() => {
+    setApproachSlideIndex(0);
+  }, [language]);
 
   return (
     <>
@@ -232,7 +288,7 @@ export default function HomePage() {
         whatsappUrl={WHATSAPP_URL}
       />
 
-      <main className="bg-white text-neutral-900">
+      <main className="bg-white pt-20 text-neutral-900 sm:pt-24">
         <Hero
           badge={copy.hero.badge}
           title={copy.hero.title}
@@ -243,22 +299,22 @@ export default function HomePage() {
         />
 
         <motion.section
-          className="mx-auto max-w-6xl px-6 py-20"
+          className="mx-auto w-full max-w-screen-xl px-4 py-12 sm:px-6 sm:py-16 md:px-8 md:py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#C2A85F]">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#C2A85F] sm:text-sm">
               {copy.services.title}
             </p>
-            <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-semibold sm:text-4xl md:text-5xl">
               {copy.services.subtitle}
             </h2>
           </div>
           <motion.div
-            className="mt-8 grid gap-4 md:grid-cols-3"
+            className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -269,21 +325,24 @@ export default function HomePage() {
               return (
                 <motion.div
                   key={service.title}
+                  className="h-full"
                   variants={sectionVariants}
                 >
                   <Link
                     href={service.href}
-                    className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
+                    className="group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
                     aria-label={`Ver servicio ${service.title}`}
                   >
-                    <article className="h-full rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm transition transform group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-neutral-900/10">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1b4332] text-white shadow-lg shadow-[#1b4332]/30">
-                        <Icon className="h-6 w-6" />
+                    <article className="flex h-full flex-col rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm transition group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-neutral-900/10 sm:p-8">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1b4332] text-white shadow-lg shadow-[#1b4332]/30 sm:h-14 sm:w-14">
+                        <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
                       </div>
-                      <h3 className="mt-6 text-xl font-semibold text-neutral-900">
+                      <h3 className="mt-6 text-xl font-semibold text-neutral-900 sm:text-2xl">
                         {service.title}
                       </h3>
-                      <p className="mt-3 text-sm text-neutral-600">{service.description}</p>
+                      <p className="mt-3 text-sm text-neutral-600 sm:text-base">
+                        {service.description}
+                      </p>
                     </article>
                   </Link>
                 </motion.div>
@@ -303,23 +362,23 @@ export default function HomePage() {
 
         <motion.section
           id="projects"
-          className="bg-[#f5f5f5] py-20"
+          className="bg-[#f5f5f5] py-12 sm:py-16 md:py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <div className="mx-auto max-w-6xl px-6">
+          <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 md:px-8">
             <div className="max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b4332]">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b4332] sm:text-sm">
                 {copy.projects.title}
               </p>
-              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
+              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl md:text-5xl">
                 {copy.projects.subtitle}
               </h2>
             </div>
             <motion.div
-              className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
@@ -345,13 +404,13 @@ export default function HomePage() {
         </motion.section>
 
         <motion.section
-          className="bg-[#f7f7f7]"
+          className="bg-[#f7f7f7] py-12 sm:py-16 md:py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="mx-auto grid w-full max-w-screen-xl items-center gap-10 px-4 sm:px-6 md:px-8 lg:grid-cols-[1.1fr_0.9fr]">
             <motion.div
               className="w-full"
               variants={sectionVariants}
@@ -359,50 +418,65 @@ export default function HomePage() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b4332]">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b4332] sm:text-sm">
                 {copy.approach.title}
               </p>
-              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
+              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl md:text-5xl">
                 {copy.approach.heading}
               </h2>
-              <div className="mt-6 rounded-3xl border border-neutral-300/60 bg-white/85 p-6 shadow-sm shadow-neutral-900/5">
-                <p className="text-base font-light italic text-neutral-600">
-                  &ldquo;{copy.approach.quote}&rdquo;
-                </p>
-                <div className="mt-6 text-sm text-neutral-500">
-                  <p className="font-semibold text-neutral-900">{copy.approach.author}</p>
+              <div className="mt-6 rounded-3xl border border-neutral-300/60 bg-white/85 p-6 shadow-sm shadow-neutral-900/5 sm:p-8">
+                <motion.p
+                  key={currentApproachMessage}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="text-base font-light italic text-neutral-600 sm:text-lg"
+                >
+                  &ldquo;{currentApproachMessage}&rdquo;
+                </motion.p>
+                <div className="mt-6 text-sm text-neutral-500 sm:text-base">
+                  <p className="font-semibold text-neutral-900">
+                    {copy.approach.author}
+                  </p>
                   <p>{copy.approach.role}</p>
                 </div>
               </div>
             </motion.div>
             <motion.div
-              className="w-full flex justify-center lg:justify-end"
+              className="flex w-full justify-center lg:justify-end"
               variants={sectionVariants}
             >
               <div className="w-full max-w-xl">
-              <Swiper
-                modules={[Autoplay, Pagination]}
-                slidesPerView={1}
-                loop
-                autoplay={{ delay: 5000, disableOnInteraction: false }}
-                pagination={{ clickable: true }}
-                className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg shadow-neutral-900/10"
-              >
-                {approachSlides.map((slide) => (
-                  <SwiperSlide key={slide.src}>
-                    <div className="relative aspect-[4/5] w-full overflow-hidden">
-                      <Image
-                        src={slide.src}
-                        alt="Juan Granato"
-                        fill
-                        sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 100vw"
-                        className={slide.className}
-                        priority={slide.priority}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                <Swiper
+                  modules={[Autoplay, Pagination]}
+                  slidesPerView={1}
+                  loop
+                  autoplay={{ delay: 8000, disableOnInteraction: false }}
+                  onSlideChange={(swiperInstance) => {
+                    const index =
+                      typeof swiperInstance.realIndex === "number"
+                        ? swiperInstance.realIndex
+                        : swiperInstance.activeIndex ?? 0;
+                    setApproachSlideIndex(index);
+                  }}
+                  pagination={{ clickable: true }}
+                  className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg shadow-neutral-900/10"
+                >
+                  {approachSlides.map((slide) => (
+                    <SwiperSlide key={slide.src}>
+                      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl">
+                        <Image
+                          src={slide.src}
+                          alt={`Juan Granato - ${slide.message || copy.approach.title}`}
+                          fill
+                          sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 100vw"
+                          className={`h-full w-full rounded-2xl object-cover ${slide.className ?? ""}`}
+                          priority={slide.priority}
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
             </motion.div>
           </div>
@@ -411,19 +485,21 @@ export default function HomePage() {
         <Testimonios />
 
         <motion.section
-          className="relative overflow-hidden bg-[#0a0a0a] py-20"
+          className="relative overflow-hidden bg-[#0a0a0a] py-12 sm:py-16 md:py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_55%)]" />
-          <div className="relative mx-auto max-w-3xl px-6 text-center text-white">
-            <h2 className="text-3xl font-semibold sm:text-4xl">{copy.cta.title}</h2>
-            <div className="mt-8">
+          <div className="relative mx-auto w-full max-w-3xl px-4 text-center text-white sm:px-6 md:px-8">
+            <h2 className="text-3xl font-semibold sm:text-4xl md:text-5xl">
+              {copy.cta.title}
+            </h2>
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/presupuesto"
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#0a0a0a] shadow-lg shadow-black/25 transition hover:-translate-y-1 hover:bg-neutral-200"
+                className="inline-flex w-full items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#0a0a0a] shadow-lg shadow-black/25 transition hover:-translate-y-1 hover:bg-neutral-200 sm:w-auto sm:px-6 sm:py-3"
               >
                 {copy.cta.button}
               </Link>

@@ -95,41 +95,47 @@ const testimonios = [
     texto:
       "Profesionalismo y sensibilidad arquitectónica destacable.",
   },
-];
+] as const;
 
 export default function Testimonios() {
   return (
-    <section className="py-16 bg-white">
-      <h2 className="text-center text-3xl font-semibold mb-10">
-        Testimonios
-      </h2>
-      <Swiper
-        modules={[Autoplay]}
-        slidesPerView={3}
-        spaceBetween={30}
-        loop
-        autoplay={{ delay: 3500, disableOnInteraction: false }}
-        breakpoints={{
-          320: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-        }}
-        className="max-w-6xl mx-auto"
-      >
-        {testimonios.map((testimonio, index) => (
-          <SwiperSlide key={`${testimonio.autor}-${index}`}>
-            <div className="bg-neutral-50 p-6 rounded-lg shadow text-center h-full flex flex-col justify-between">
-              <p className="italic text-neutral-600 mb-4">
-                “{testimonio.texto}”
-              </p>
-              <div>
-                <p className="font-semibold">{testimonio.autor}</p>
-                <p className="text-sm text-neutral-500">{testimonio.cargo}</p>
+    <section className="bg-white py-12 sm:py-16 md:py-20">
+      <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 md:px-8">
+        <h2 className="text-center text-3xl font-semibold text-neutral-900 sm:text-4xl md:text-5xl">
+          Testimonios
+        </h2>
+        <Swiper
+          modules={[Autoplay]}
+          slidesPerView={3}
+          spaceBetween={24}
+          loop
+          autoplay={{ delay: 3500, disableOnInteraction: false }}
+          breakpoints={{
+            320: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          className="mt-10 w-full"
+        >
+          {testimonios.map((testimonio, index) => (
+            <SwiperSlide key={`${testimonio.autor}-${index}`}>
+              <div className="flex h-full flex-col justify-between rounded-2xl border border-neutral-100 bg-neutral-50 p-6 text-center shadow-sm sm:p-8">
+                <p className="mb-4 text-sm italic text-neutral-600 sm:text-base">
+                  &ldquo;{testimonio.texto}&rdquo;
+                </p>
+                <div>
+                  <p className="text-base font-semibold text-neutral-900 sm:text-lg">
+                    {testimonio.autor}
+                  </p>
+                  <p className="text-sm text-neutral-500 sm:text-base">
+                    {testimonio.cargo}
+                  </p>
+                </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </section>
   );
 }

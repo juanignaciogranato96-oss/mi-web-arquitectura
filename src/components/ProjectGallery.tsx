@@ -29,7 +29,7 @@ export default function ProjectGallery({
       navigation
       pagination={{ clickable: true }}
       autoplay={{ delay: 5000, disableOnInteraction: false }}
-      className="rounded-3xl border border-neutral-200 bg-neutral-50 p-3 shadow-sm"
+      className="w-full rounded-3xl border border-neutral-200 bg-neutral-50 p-3 shadow-sm"
     >
       {images.map((imageSrc, index) => (
         <SwiperSlide key={imageSrc}>
@@ -39,7 +39,7 @@ export default function ProjectGallery({
               alt={`${projectName} imagen ${index + 1}`}
               fill
               sizes="(min-width: 1280px) 900px, (min-width: 768px) 80vw, 100vw"
-              className="object-contain"
+              className="h-full w-full rounded-2xl object-cover"
             />
           </div>
         </SwiperSlide>
