@@ -38,7 +38,7 @@ export default function ProjectGallery({
               src={imageSrc}
               alt={`${projectName} imagen ${index + 1}`}
               fill
-              sizes="(min-width: 1280px) 900px, (min-width: 768px) 80vw, 100vw"
+              sizes="(min-width: 1280px) 70rem, (min-width: 1024px) calc(100vw - 192px), (min-width: 768px) calc(100vw - 128px), calc(100vw - 48px)"
               className="h-full w-full rounded-2xl object-cover"
             />
           </div>

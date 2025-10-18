@@ -100,6 +100,7 @@ const testimonios = [
 
 export default function Testimonios() {
   const [shouldAutoplay, setShouldAutoplay] = useState(false);
+  const [isTabVisible, setIsTabVisible] = useState(true);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -115,6 +116,25 @@ export default function Testimonios() {
     return () => mediaQuery.removeEventListener("change", updatePreference);
   }, []);
 
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+    const handleVisibilityChange = () => {
+      setIsTabVisible(!document.hidden);
+    };
+    handleVisibilityChange();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  const autoplayConfig =
+    shouldAutoplay && isTabVisible
+      ? { delay: 3500, disableOnInteraction: false }
+      : false;
+
   return (
     <section className="bg-white py-12 sm:py-16 md:py-20">
       <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 md:px-8">
@@ -126,9 +146,8 @@ export default function Testimonios() {
           slidesPerView={3}
           spaceBetween={24}
           loop
-          autoplay={
-            shouldAutoplay ? { delay: 3500, disableOnInteraction: false } : false
-          }
+          autoplay={autoplayConfig}
+          watchOverflow
           breakpoints={{
             320: { slidesPerView: 1 },
             768: { slidesPerView: 2 },

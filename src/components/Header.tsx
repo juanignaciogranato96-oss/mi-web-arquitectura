@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FaWhatsapp } from "react-icons/fa";
 import type { LocaleKey } from "@/locales";
+import { SUPPORTED_LOCALES } from "@/lib/i18n";
 
 type HeaderLabels = {
   logo: string;
@@ -20,8 +21,6 @@ type HeaderProps = {
   onProjectsClick: () => void;
   whatsappUrl: string;
 };
-
-const LANG_OPTIONS: LocaleKey[] = ["es", "en"];
 
 export function Header({
   labels,
@@ -92,7 +91,7 @@ export function Header({
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
-            {LANG_OPTIONS.map((option) => {
+            {SUPPORTED_LOCALES.map((option) => {
               const isActive = option === language;
               return (
                 <button

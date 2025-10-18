@@ -1,7 +1,7 @@
 {
   "hero": {
-    "badge": "JG VISUAL ESTUDIO · DIRIGIDO POR EL ARQ. JUAN GRANATO",
-    "title": "Diseñamos y visualizamos arquitectura que se vive.",
+    "badge": "JG VISUAL ESTUDIO - DIRIGIDO POR EL ARQ. JUAN GRANATO",
+    "title": "Disenamos y visualizamos arquitectura que se vive.",
     "subtitle": "",
     "buttons": {
       "projects": "Ver proyectos",
@@ -11,35 +11,35 @@
   },
   "services": {
     "title": "Servicios",
-    "subtitle": "Acompañamos cada etapa del proyecto con visualizaciones 3D, diseño integral y gestión documental.",
+    "subtitle": "Acompanamos cada etapa del proyecto con visualizaciones 3D, diseno integral y gestion documental.",
     "items": [
       {
         "title": "Render 3D",
-        "description": "Imágenes que comunican ideas antes de construir y potencian ventas."
+        "description": "Imagenes que comunican ideas antes de construir y potencian ventas."
       },
       {
-        "title": "Diseño arquitectónico integral",
+        "title": "Diseno arquitectonico integral",
         "description": "Concepto, desarrollo y detalle constructivo alineado a objetivos del cliente."
       },
       {
-        "title": "Regularización de obra",
-        "description": "Gestión técnica y documental en Rosario y alrededores con seguimiento cercano."
+        "title": "Regularizacion de obra",
+        "description": "Gestion tecnica y documental en Rosario y alrededores con seguimiento cercano."
       }
     ]
   },
   "projects": {
-    "title": "Últimos proyectos",
+    "title": "Ultimos proyectos",
     "subtitle": "Visuales que destacan la esencia material, la luz y el habitar de cada espacio.",
     "overlay": "Ver proyecto",
     "items": [
       {
         "slug": "cafe-chilin",
-        "name": "Café Chilin",
+        "name": "Cafe Chilin",
         "type": "Comercial"
       },
       {
         "slug": "casa-hormigon",
-        "name": "Casa Hormigón",
+        "name": "Casa Hormigon",
         "type": "Residencial"
       },
       {
@@ -70,43 +70,43 @@
   },
   "approach": {
     "title": "Nuestro enfoque",
-    "heading": "Acompañamos cada proyecto desde la idea hasta la imagen final lista para presentar.",
-    "quote": "Combinamos diálogo con el estudio, dirección de arte y postproducción para que cada entrega hable del ADN del proyecto.",
+    "heading": "Acompanamos cada proyecto desde la idea hasta la imagen final lista para presentar.",
+    "quote": "Combinamos dialogo con el estudio, direccion de arte y postproduccion para que cada entrega hable del ADN del proyecto.",
     "author": "Arq. Juan Granato",
     "role": "Director de JG Visual Estudio",
     "highlights": [
-      "Diagnóstico inicial para entender objetivos comerciales y sensoriales.",
-      "Definimos paleta material y atmósfera desde la primera reunión.",
+      "Diagnostico inicial para entender objetivos comerciales y sensoriales.",
+      "Definimos paleta material y atmosfera desde la primera reunion.",
       "Iteramos renders previos con feedback constante del estudio.",
-      "Modelado detallado y seteo de cámaras enfocado en realismo.",
-      "Dirección de arte y post para narrar la historia del espacio.",
-      "Entregables prontos para presupuestos, presentaciones y redes.",
-      "Acompañamos ajustes hasta la aprobación final del cliente."
+      "Modelado detallado y seteo de camaras enfocado en realismo.",
+      "Direccion de arte y post para narrar la historia del espacio.",
+      "Entregables listos para presupuestos, presentaciones y redes.",
+      "Acompanamos ajustes hasta la aprobacion final del cliente."
     ]
   },
   "testimonials": {
     "title": "Testimonios",
-    "subtitle": "Estudios, desarrolladoras y constructoras confían en nuestro proceso.",
+    "subtitle": "Estudios, desarrolladoras y constructoras confian en nuestro proceso.",
     "items": [
       {
-        "quote": "El nivel de detalle en los renders de Juan permite resolver decisiones antes de obra y elevar la presentación con inversores.",
-        "author": "Arq. Sofía Méndez",
-        "role": "Estudio Hábitat"
+        "quote": "El nivel de detalle en los renders de Juan permite resolver decisiones antes de obra y elevar la presentacion con inversores.",
+        "author": "Arq. Sofia Mendez",
+        "role": "Estudio Habitat"
       },
       {
-        "quote": "La metodología colaborativa asegura consistencia desde el concepto hasta la documentación final.",
-        "author": "Ing. Nicolás Raffo",
+        "quote": "Su metodologia colaborativa asegura consistencia desde el concepto hasta la documentacion final.",
+        "author": "Ing. Nicolas Raffo",
         "role": "Constructora RFX"
       },
       {
-        "quote": "Cumple plazos exigentes sin resignar precisión y es nuestro aliado para regularizaciones en Rosario.",
+        "quote": "Cumple plazos exigentes sin resignar precision y es nuestro aliado para regularizaciones en Rosario.",
         "author": "Dra. Valentina Cano",
         "role": "Desarrolladora inmobiliaria"
       }
     ]
   },
   "cta": {
-    "title": "¿Listo para mostrar tu proyecto como nunca antes?",
+    "title": "Listo para mostrar tu proyecto como nunca antes?",
     "button": "Solicitar presupuesto"
   },
   "header": {

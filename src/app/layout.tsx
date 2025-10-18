@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { GeistSans } from "geist/font/sans";
 import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
+import { getAbsoluteUrl, getMetadataBase, getSiteUrl } from "@/lib/site";
 import "./globals.css";
 
 const WHATSAPP_URL = "https://wa.me/543415799316";
@@ -12,12 +13,12 @@ const SITE_DESCRIPTION_ES =
   "Estudio especializado en diseno arquitectonico, renders 3D y regularizacion de obra en Rosario y Argentina.";
 const SITE_DESCRIPTION_EN =
   "Architecture studio delivering 3D visualization, architectural design, and permitting services in Rosario and across Argentina.";
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://jg-diseno-arquitectura.com"; // TODO: Confirmar dominio oficial para metadataBase.
+const SITE_URL = getSiteUrl();
+const METADATA_BASE = getMetadataBase();
 
 // FIX: Enriquecer metadatos base para SEO y redes sociales en ambos idiomas.
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: METADATA_BASE,
   title: {
     template: `%s | ${SITE_NAME_ES}`,
     default: `${SITE_NAME_ES} - ${SITE_NAME_EN}`,
@@ -64,7 +65,7 @@ export const metadata: Metadata = {
     description: `${SITE_DESCRIPTION_ES} ${SITE_DESCRIPTION_EN}`,
     images: [
       {
-        url: "/images/hero.webp",
+        url: getAbsoluteUrl("/images/hero.webp"),
         width: 1920,
         height: 1080,
         alt: `${SITE_NAME_ES} renders 3D`,
@@ -75,7 +76,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME_ES} - ${SITE_NAME_EN}`,
     description: `${SITE_DESCRIPTION_ES} ${SITE_DESCRIPTION_EN}`,
-    images: ["/images/hero.webp"],
+    images: [getAbsoluteUrl("/images/hero.webp")],
   },
 };
 

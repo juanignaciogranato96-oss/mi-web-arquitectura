@@ -1,13 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const PROCESO_PASOS = [
+type Step = {
+  id: number;
+  title: string;
+  description: string;
+};
+
+const ROTATION_INTERVAL_MS = 5000;
+const DESCRIPTION_ID = "work-process-description";
+
+const STEPS: Step[] = [
   {
     id: 1,
-    title: "Brief y visión compartida",
+    title: "Brief y vision compartida",
     description:
-      "Relevamos documentación, objetivos comerciales y atmósfera deseada junto al cliente.",
+      "Relevamos documentacion, objetivos comerciales y atmosfera deseada junto al cliente.",
   },
   {
     id: 2,
@@ -19,47 +28,48 @@ const PROCESO_PASOS = [
     id: 3,
     title: "Seteo de escena y materiales",
     description:
-      "Configuramos cámaras, iluminación y materiales acordes a la identidad del proyecto.",
+      "Configuramos camaras, iluminacion y materiales acordes a la identidad del proyecto.",
   },
   {
     id: 4,
     title: "Primeros renders y feedback guiado",
     description:
-      "Publicamos avances en carpeta privada y guiamos la revisión con observaciones precisas.",
+      "Publicamos avances en carpeta privada y guiamos la revision con observaciones precisas.",
   },
   {
     id: 5,
-    title: "Iteraciones finales y postproducción",
+    title: "Iteraciones finales y postproduccion",
     description:
-      "Aplicamos ajustes, afinamos detalles y trabajamos la postproducción fotográfica.",
+      "Aplicamos ajustes, afinamos detalles y trabajamos la postproduccion fotografica.",
   },
   {
     id: 6,
-    title: "Entrega final y acompañamiento",
+    title: "Entrega final y acompanamiento",
     description:
       "Subimos el material final y seguimos disponibles para activaciones o ajustes posteriores.",
   },
-] as const;
+];
 
 export default function ProcesoTrabajo() {
-  const [activeStep, setActiveStep] = useState<number>(PROCESO_PASOS[0].id);
+  const [activeStep, setActiveStep] = useState<number>(STEPS[0].id);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
       setActiveStep((prev) => {
-        const currentIndex = PROCESO_PASOS.findIndex((step) => step.id === prev);
-        const nextIndex = (currentIndex + 1) % PROCESO_PASOS.length;
-        return PROCESO_PASOS[nextIndex].id;
+        const currentIndex = STEPS.findIndex((step) => step.id === prev);
+        const nextIndex = (currentIndex + 1) % STEPS.length;
+        return STEPS[nextIndex].id;
       });
-    }, 5000);
+    }, ROTATION_INTERVAL_MS);
 
     return () => {
       window.clearInterval(intervalId);
     };
   }, []);
 
-  const activeData =
-    PROCESO_PASOS.find((item) => item.id === activeStep) ?? PROCESO_PASOS[0];
+  const activeData = useMemo(() => {
+    return STEPS.find((item) => item.id === activeStep) ?? STEPS[0];
+  }, [activeStep]);
 
   return (
     <section className="bg-neutral-50 py-12 sm:py-16 md:py-20">
@@ -68,11 +78,11 @@ export default function ProcesoTrabajo() {
           Proceso de trabajo
         </h2>
         <p className="mt-3 text-base text-neutral-600 sm:text-lg">
-          Conocé cómo articulamos cada etapa junto a tu equipo.
+          Conoce como articulamos cada etapa junto a tu equipo.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          {PROCESO_PASOS.map((step) => {
+          {STEPS.map((step) => {
             const isActive = step.id === activeStep;
             return (
               <button
@@ -85,6 +95,8 @@ export default function ProcesoTrabajo() {
                     : "bg-[#0C2D57]/70 hover:bg-[#0C2D57]"
                 }`}
                 aria-pressed={isActive}
+                aria-label={`Paso ${step.id}: ${step.title}`}
+                aria-controls={DESCRIPTION_ID}
               >
                 {step.id}
               </button>
@@ -92,8 +104,17 @@ export default function ProcesoTrabajo() {
           })}
         </div>
 
-        <div className="mx-auto mt-10 max-w-3xl rounded-2xl border border-neutral-200 bg-white p-6 text-left shadow-sm transition-all duration-300 sm:p-8">
-          <h3 className="text-lg font-semibold text-neutral-900 sm:text-xl">
+        <div
+          id={DESCRIPTION_ID}
+          role="region"
+          aria-live="polite"
+          aria-labelledby={`work-step-title-${activeData.id}`}
+          className="mx-auto mt-10 max-w-3xl rounded-2xl border border-neutral-200 bg-white p-6 text-left shadow-sm transition-all duration-300 sm:p-8"
+        >
+          <h3
+            id={`work-step-title-${activeData.id}`}
+            className="text-lg font-semibold text-neutral-900 sm:text-xl"
+          >
             {activeData.title}
           </h3>
           <p className="mt-3 text-sm text-neutral-600 sm:text-base">

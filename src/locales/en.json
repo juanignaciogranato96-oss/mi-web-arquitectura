@@ -1,6 +1,6 @@
 {
   "hero": {
-    "badge": "JG VISUAL STUDIO · LED BY ARCH. JUAN GRANATO",
+    "badge": "JG VISUAL STUDIO - LED BY ARCH. JUAN GRANATO",
     "title": "We design and visualize architecture you can feel.",
     "subtitle": "",
     "buttons": {
@@ -23,18 +23,18 @@
       },
       {
         "title": "Building regularization",
-        "description": "Technical and paperwork management in Rosario and surrounding areas with close follow-up."
+        "description": "Technical and paperwork management in Rosario and nearby areas with close follow-up."
       }
     ]
   },
   "projects": {
     "title": "Latest projects",
-    "subtitle": "Visual stories highlighting materiality, light and how each space is experienced.",
+    "subtitle": "Visual stories highlighting materiality, light and the way each space is experienced.",
     "overlay": "View project",
     "items": [
       {
         "slug": "cafe-chilin",
-        "name": "Chilin Café",
+        "name": "Chilin Cafe",
         "type": "Commercial"
       },
       {
@@ -44,7 +44,7 @@
       },
       {
         "slug": "casa-teros",
-        "name": "Casa Teros",
+        "name": "Teros House",
         "type": "Residential"
       },
       {
@@ -70,18 +70,18 @@
   },
   "approach": {
     "title": "Our approach",
-    "heading": "We guide each commission from concept to the final presentation-ready imagery.",
-    "quote": "Our workflow blends design conversations, art direction and post-production so every deliverable reflects the project’s DNA.",
+    "heading": "We guide every commission from concept to presentation-ready imagery.",
+    "quote": "Our workflow blends design conversations, art direction and post-production so each deliverable reflects the project's DNA.",
     "author": "Arch. Juan Granato",
     "role": "Director at JG Visual Studio",
     "highlights": [
-      "Initial diagnosis to grasp commercial and experiential goals.",
-      "We shape material palettes and mood from the first meeting.",
+      "Initial diagnosis to understand commercial and experiential goals.",
+      "We define materials and mood from the first meeting.",
       "Preview renders iterate quickly with studio feedback.",
       "Detailed modeling and camera setup grounded in realism.",
-      "Art direction and post turn every frame into a narrative.",
+      "Art direction and post turn each frame into a narrative.",
       "Deliverables ready for budgets, pitches and social media.",
-      "We stay involved through the client’s final approval."
+      "We stay involved through the client's final approval."
     ]
   },
   "testimonials": {
@@ -89,7 +89,7 @@
     "subtitle": "Studios, developers and builders rely on our process.",
     "items": [
       {
-        "quote": "The level of detail in Juan's renders lets us solve decisions ahead of construction and elevate every investor presentation.",
+        "quote": "The level of detail in Juan's renders lets us solve decisions before construction and elevate investor presentations.",
         "author": "Arch. Sofia Mendez",
         "role": "Habitat Studio"
       },
@@ -99,7 +99,7 @@
         "role": "RFX Construction"
       },
       {
-        "quote": "He meets demanding timelines without sacrificing precision and is our partner for permitting in Rosario.",
+        "quote": "He meets tight deadlines without losing precision and is our partner for permitting in Rosario.",
         "author": "Dr. Valentina Cano",
         "role": "Real estate developer"
       }

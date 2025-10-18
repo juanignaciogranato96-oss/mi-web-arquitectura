@@ -27,22 +27,22 @@ const galleryItem = {
 
 const galleryItems = [
   {
-    src: "/images/proyectos/CAFE-CHILIN (1).webp",
+    src: "/images/proyectos/CAFE-CHILIN (1).avif",
     alt: "Render interior de cafeteria con luz natural",
     caption: "Experiencias comerciales inmersivas",
   },
   {
-    src: "/images/proyectos/CASA-HA (2).webp",
+    src: "/images/proyectos/CASA-HA (2).avif",
     alt: "Render residencial con materiales calidos",
     caption: "Residencias con narrativa luminosa",
   },
   {
-    src: "/images/proyectos/GLAM (2).webp",
+    src: "/images/proyectos/GLAM (2).avif",
     alt: "Render de local comercial con diseno contemporaneo",
     caption: "Retail y branding espacial",
   },
   {
-    src: "/images/proyectos/KAI (3).webp",
+    src: "/images/proyectos/KAI (3).avif",
     alt: "Render arquitectonico con foco en exterior",
     caption: "Exteriorismo realista y atmosferas",
   },

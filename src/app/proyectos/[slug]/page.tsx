@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { proyectos } from "@/data/proyectos";
 import ProjectGallery from "@/components/ProjectGallery";
+import { getAbsoluteUrl } from "@/lib/site";
 
 type ProyectoPageProps = {
   params: {
@@ -13,7 +14,7 @@ type ProyectoPageProps = {
   };
 };
 
-const SUPPORTED_EXTENSIONS = new Set([".webp", ".png", ".jpg", ".jpeg"]);
+const SUPPORTED_EXTENSIONS = new Set([".avif", ".webp", ".png", ".jpg", ".jpeg"]);
 
 type GlobFunction = <T = unknown>(
   pattern: string,
@@ -102,26 +103,40 @@ export async function generateMetadata({
   const description =
     project.descripcion.slice(0, 155) || "Proyecto destacado del estudio.";
   const previewImage = project.portada ?? project.imagenes?.[0];
+  const canonicalPath = `/proyectos/${project.slug}`;
+  const absolutePreview =
+    previewImage && previewImage.startsWith("http")
+      ? previewImage
+      : previewImage
+        ? getAbsoluteUrl(previewImage)
+        : undefined;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/proyectos/${project.slug}`,
+      canonical: getAbsoluteUrl(canonicalPath),
     },
     openGraph: {
       type: "article",
       title,
       description,
-      url: `/proyectos/${project.slug}`,
-      images: previewImage
+      url: getAbsoluteUrl(canonicalPath),
+      siteName: "J.G. Visual Estudio",
+      images: absolutePreview
         ? [
             {
-              url: previewImage,
+              url: absolutePreview,
               alt: `${project.nombre} render`,
             },
           ]
         : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: absolutePreview ? [absolutePreview] : undefined,
     },
   };
 }

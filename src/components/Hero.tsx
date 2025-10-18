@@ -13,10 +13,10 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
-const HERO_VIDEOS = ["/videos/hero.mp4", "/videos/hero_2.mp4"] as const;
+const HERO_VIDEOS = ["/videos/giro.mp4", "/videos/giro-2.mp4"] as const;
 const OVERLAY_BASE_CLASS = "bg-black/18";
 const FADE_DURATION_MS = 600;
-const HERO_ONE_MAX_TIME = 7; // seconds
+const HERO_ONE_MAX_TIME = 6; // seconds
 
 type HeroProps = {
   badge: string;
@@ -215,7 +215,7 @@ export default function Hero({
             src={videoSrc}
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             poster="/images/hero.webp"
             onEnded={() => handleVideoEnd(index)}
             className={`absolute inset-0 h-full w-full scale-[1.1] transform-gpu object-cover transition-opacity ease-linear ${
@@ -247,12 +247,12 @@ export default function Hero({
         initial={animationsEnabled ? "hidden" : undefined}
         animate={animationsEnabled ? "visible" : undefined}
       >
-        <motion.h2
+        <motion.p
           className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/80 sm:text-sm"
           variants={animationsEnabled ? elementVariants : undefined}
         >
           {badge}
-        </motion.h2>
+        </motion.p>
         <motion.h1
           className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl lg:text-6xl"
           variants={animationsEnabled ? elementVariants : undefined}

@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,22 +18,21 @@ import {
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import Hero from "@/components/Hero";
-import ProcesoTrabajo from "@/components/ProcesoTrabajo";
-import Testimonios from "@/components/Testimonios";
 import { proyectos } from "@/data/proyectos";
 import type { Proyecto } from "@/data/proyectos";
 import type { LocaleKey } from "@/locales";
 import { getCopy } from "@/locales";
 import { useSmoothScroll } from "@/components/SmoothScrollProvider";
+import { DEFAULT_LOCALE, isSupportedLocale } from "@/lib/i18n";
 
 type ProjectCategory = "commercial" | "residential";
 
 const CATEGORY_COLORS: Record<ProjectCategory, string> = {
-  commercial: "#EAC64D",
-  residential: "#9DBA8F",
+  commercial: "#F7D46C",
+  residential: "#CFE4C8",
 };
 
-const DEFAULT_PROJECT_FALLBACK = "/images/estudio/CASA-HA-DIA.webp";
+const DEFAULT_PROJECT_FALLBACK = "/images/estudio/casa-hormigon-portada.avif";
 
 const WHATSAPP_URL = "https://wa.me/543415799316";
 
@@ -57,6 +57,27 @@ const SERVICE_ROUTES = [
   "/servicios/diseno-arquitectonico-integral",
   "/servicios/regularizacion-de-obra",
 ] as const;
+
+const ProcesoTrabajo = dynamic(() => import("@/components/ProcesoTrabajo"), {
+  loading: () => (
+    <section className="bg-neutral-50 py-12 sm:py-16 md:py-20">
+      <div className="mx-auto w-full max-w-screen-lg px-4 sm:px-6 md:px-8">
+        <div className="h-24 animate-pulse rounded-3xl bg-white/60" />
+      </div>
+    </section>
+  ),
+});
+
+const Testimonios = dynamic(() => import("@/components/Testimonios"), {
+  ssr: false,
+  loading: () => (
+    <section className="bg-white py-12 sm:py-16 md:py-20">
+      <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 md:px-8">
+        <div className="h-40 animate-pulse rounded-3xl bg-neutral-100" />
+      </div>
+    </section>
+  ),
+});
 
 type CopyContent = ReturnType<typeof getCopy>;
 type ProjectCopyItem = CopyContent["projects"]["items"][number];
@@ -119,7 +140,7 @@ function ProjectCard({
             src={src}
             alt={name}
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1280px) calc((min(1280px, 100vw) - 64px) / 3), (min-width: 1024px) calc((min(1200px, 100vw) - 48px) / 3), (min-width: 768px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
             priority={isPriority}
             className="h-full w-full rounded-2xl object-cover transition duration-700 group-hover:scale-105"
             onError={() => {
@@ -152,7 +173,7 @@ function ProjectCard({
 
 export default function HomePage() {
   const { scroll } = useSmoothScroll();
-  const [language, setLanguage] = useState<LocaleKey>("es");
+  const [language, setLanguage] = useState<LocaleKey>(DEFAULT_LOCALE);
   const copy = getCopy(language);
   const [approachSlideIndex, setApproachSlideIndex] = useState(0);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
@@ -162,7 +183,7 @@ export default function HomePage() {
       return;
     }
     const storedLanguage = window.localStorage.getItem("jg-visual-lang");
-    if (storedLanguage === "es" || storedLanguage === "en") {
+    if (storedLanguage && isSupportedLocale(storedLanguage)) {
       setLanguage(storedLanguage);
     }
   }, [setLanguage]);
@@ -232,37 +253,37 @@ export default function HomePage() {
     () => {
       const baseSlides = [
         {
-          src: "/images/team/1.webp",
+          src: "/images/team/1.avif",
           className: "filter grayscale",
           priority: true,
         },
         {
-          src: "/images/team/2.webp",
+          src: "/images/team/2.avif",
           className: "filter grayscale",
           priority: false,
         },
         {
-          src: "/images/team/3.webp",
+          src: "/images/team/3.avif",
           className: "filter grayscale",
           priority: false,
         },
         {
-          src: "/images/team/4.webp",
+          src: "/images/team/4.avif",
           className: "filter grayscale",
           priority: false,
         },
         {
-          src: "/images/team/5.webp",
+          src: "/images/team/5.avif",
           className: "filter grayscale",
           priority: false,
         },
         {
-          src: "/images/team/6.webp",
+          src: "/images/team/6.avif",
           className: "filter grayscale",
           priority: false,
         },
         {
-          src: "/images/team/7.webp",
+          src: "/images/team/7.avif",
           className: "filter grayscale",
           priority: false,
         },
@@ -528,7 +549,7 @@ export default function HomePage() {
                           src={slide.src}
                           alt={`Juan Granato - ${slide.message || copy.approach.title}`}
                           fill
-                          sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 100vw"
+                          sizes="(min-width: 1280px) calc((min(1280px, 100vw) - 64px) / 2.2), (min-width: 1024px) calc((min(1200px, 100vw) - 48px) / 2.2), (min-width: 768px) calc((100vw - 48px) / 1.6), calc(100vw - 32px)"
                           className={`h-full w-full rounded-2xl object-cover ${slide.className ?? ""}`}
                           priority={index === 0}
                         />

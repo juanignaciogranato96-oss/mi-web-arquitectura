@@ -18,6 +18,7 @@ import type LocomotiveScroll from "locomotive-scroll";
 type SmoothScrollContextValue = {
   scroll: LocomotiveScroll | null;
   containerRef: MutableRefObject<HTMLDivElement | null>;
+  isEnabled: boolean;
 };
 
 const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(
@@ -38,21 +39,64 @@ type SmoothScrollProviderProps = {
   children: ReactNode;
 };
 
+function shouldEnableSmoothScroll() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const saveData = Boolean(navigator.connection?.saveData);
+  const isSmallViewport = window.innerWidth < 1024;
+  return !prefersReducedMotion && !saveData && !isSmallViewport;
+}
+
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [scrollInstance, setScrollInstance] =
     useState<LocomotiveScroll | null>(null);
+  const [isEnabled, setIsEnabled] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
+    const update = () => {
+      setIsEnabled(shouldEnableSmoothScroll());
+    };
+    update();
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleMotionChange = () => update();
+
+    window.addEventListener("resize", update);
+    motionQuery.addEventListener("change", handleMotionChange);
+
+    return () => {
+      window.removeEventListener("resize", update);
+      motionQuery.removeEventListener("change", handleMotionChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (!isEnabled) {
+      if (scrollInstance) {
+        scrollInstance.destroy();
+        setScrollInstance(null);
+      }
+      return;
+    }
 
     let resizeObserver: ResizeObserver | null = null;
     let rafId: number | null = null;
     let instance: LocomotiveScroll | null = null;
-    const update = () => {
+
+    const scheduleUpdate = () => {
       if (rafId) {
         window.cancelAnimationFrame(rafId);
       }
@@ -73,36 +117,37 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
         smooth: true,
         multiplier: 1,
         lerp: 0.08,
-        smartphone: { smooth: true },
-        tablet: { smooth: true },
+        smartphone: { smooth: false },
+        tablet: { smooth: false },
       });
 
       setScrollInstance(instance);
 
       if ("ResizeObserver" in window) {
-        resizeObserver = new ResizeObserver(update);
+        resizeObserver = new ResizeObserver(scheduleUpdate);
         resizeObserver.observe(containerRef.current);
       }
 
-      window.addEventListener("resize", update);
-      window.addEventListener("load", update);
+      window.addEventListener("resize", scheduleUpdate);
+      window.addEventListener("load", scheduleUpdate);
     };
 
     initialize().catch(() => {
-      // Fail silently if locomotive-scroll cannot be initialized
+      setScrollInstance(null);
+      setIsEnabled(false);
     });
 
     return () => {
       if (rafId) {
         window.cancelAnimationFrame(rafId);
       }
-      window.removeEventListener("resize", update);
-      window.removeEventListener("load", update);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("load", scheduleUpdate);
       resizeObserver?.disconnect();
       instance?.destroy();
       setScrollInstance(null);
     };
-  }, []);
+  }, [isEnabled]);
 
   useEffect(() => {
     if (!scrollInstance || typeof window === "undefined") {
@@ -126,14 +171,18 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     () => ({
       scroll: scrollInstance,
       containerRef,
+      isEnabled,
     }),
-    [scrollInstance],
+    [scrollInstance, isEnabled],
   );
 
   return (
     <SmoothScrollContext.Provider value={contextValue}>
       <LazyMotion features={domAnimation}>
-        <div ref={containerRef} data-scroll-container>
+        <div
+          ref={containerRef}
+          data-scroll-container={isEnabled ? true : undefined}
+        >
           {children}
         </div>
       </LazyMotion>

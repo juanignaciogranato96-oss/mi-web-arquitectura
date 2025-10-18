@@ -20,11 +20,13 @@ type FooterProps = {
 const SOCIALS: Array<{
   href: string;
   key: SocialKey;
+  name: string;
   icon: ReactElement;
 }> = [
   {
     href: "https://instagram.com/jg_archviz",
     key: "instagram",
+    name: "Instagram",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +46,7 @@ const SOCIALS: Array<{
   {
     href: "https://behance.net/juangranato2",
     key: "behance",
+    name: "Behance",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +91,7 @@ export function Footer({ labels }: FooterProps) {
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white transition hover:-translate-y-1 hover:border-[#C2A85F] hover:text-[#C2A85F]"
-              aria-label={labels[item.key]}
+              aria-label={`Abrir ${item.name} de ${labels.heading}`}
             >
               {item.icon}
             </Link>
