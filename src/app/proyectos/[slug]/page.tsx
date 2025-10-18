@@ -9,9 +9,9 @@ import ProjectGallery from "@/components/ProjectGallery";
 import { getAbsoluteUrl } from "@/lib/site";
 
 type ProyectoPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 const SUPPORTED_EXTENSIONS = new Set([".avif", ".webp", ".png", ".jpg", ".jpeg"]);
@@ -89,7 +89,8 @@ async function getProjectImages(slug: string) {
 export async function generateMetadata({
   params,
 }: ProyectoPageProps): Promise<Metadata> {
-  const project = proyectos.find((item) => item.slug === params.slug);
+  const { slug } = await params;
+  const project = proyectos.find((item) => item.slug === slug);
 
   if (!project) {
     return {
@@ -142,8 +143,8 @@ export async function generateMetadata({
 }
 
 export default async function ProyectoPage({ params }: ProyectoPageProps) {
-  const project =
-    proyectos.find((item) => item.slug === params.slug) ?? notFound();
+  const { slug } = await params;
+  const project = proyectos.find((item) => item.slug === slug) ?? notFound();
 
   const dynamicImages = await getProjectImages(project.slug);
   const galleryImages =

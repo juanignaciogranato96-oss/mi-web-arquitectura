@@ -46,7 +46,11 @@ function shouldEnableSmoothScroll() {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  const saveData = Boolean(navigator.connection?.saveData);
+  const connection =
+    (navigator as Navigator & {
+      connection?: { saveData?: boolean };
+    }).connection;
+  const saveData = Boolean(connection?.saveData);
   const isSmallViewport = window.innerWidth < 1024;
   return !prefersReducedMotion && !saveData && !isSmallViewport;
 }
@@ -147,7 +151,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       instance?.destroy();
       setScrollInstance(null);
     };
-  }, [isEnabled]);
+  }, [isEnabled, scrollInstance]);
 
   useEffect(() => {
     if (!scrollInstance || typeof window === "undefined") {
