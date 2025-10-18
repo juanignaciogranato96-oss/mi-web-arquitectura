@@ -1,4 +1,9 @@
-@import "tailwindcss";
+@import "locomotive-scroll/dist/locomotive-scroll.css";
+
+/* FIX: Reemplazar la importacion unica de Tailwind 4 por las capas de Tailwind 3. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   color-scheme: light;
@@ -13,7 +18,7 @@ html {
 body {
   min-height: 100%;
   margin: 0;
-  font-family: var(--font-plus-jakarta, "Plus Jakarta Sans"), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-geist-sans, "Geist Sans"), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: #f5f5f5;
   color: #0a0a0a;
   -webkit-font-smoothing: antialiased;

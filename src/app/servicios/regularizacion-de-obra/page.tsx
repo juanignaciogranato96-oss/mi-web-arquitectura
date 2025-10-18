@@ -1,53 +1,69 @@
 'use client';
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 
 const fadeInVariants = {
   initial: { opacity: 0, y: 32 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
+// FIX: Metadata para describir el servicio de regularizacion.
+export const metadata: Metadata = {
+  title: "Regularizacion de obra | Servicios - J.G. Visual Estudio",
+  description:
+    "Gestion tecnica, documentacion conforme a obra y tramites municipales para regularizar construcciones en Rosario y alrededores.",
+  alternates: {
+    canonical: "/servicios/regularizacion-de-obra",
+  },
+};
+
 export default function RegularizacionDeObraPage() {
   return (
-    <main className="flex-1 bg-white">
-      <motion.section
-        className="mx-auto max-w-4xl px-6 py-20 text-neutral-900 md:px-0 lg:py-24"
-        variants={fadeInVariants}
-        initial="initial"
-        animate="animate"
-      >
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm font-medium text-[#1b4332] transition hover:text-[#2d6a4f]"
+    <>
+      {/* FIX: Reemplazar main anidado por wrapper neutro y alinear iconografia accesible. */}
+      <div className="flex-1 bg-white">
+        <motion.section
+          className="mx-auto max-w-4xl px-6 py-20 text-neutral-900 md:px-0 lg:py-24"
+          variants={fadeInVariants}
+          initial="initial"
+          animate="animate"
         >
-          <span aria-hidden="true">←</span>
-          Volver al inicio
-        </Link>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[#1b4332] transition hover:text-[#2d6a4f]"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden />
+            Volver al inicio
+          </Link>
 
-        <h1 className="mt-8 text-4xl font-bold sm:text-5xl">
-          Regularización de obra
-        </h1>
+          <h1 className="mt-8 text-4xl font-bold sm:text-5xl">
+            Regularizacion de obra
+          </h1>
 
-        <div className="mt-8 space-y-5 text-base leading-relaxed text-neutral-700 sm:text-lg">
-          <p>
-            Realizamos la gestión técnica y documental necesaria para regularizar construcciones existentes ante los organismos municipales.
-          </p>
-          <p>
-            Incluye relevamiento, planos conforme a obra y trámites en el Colegio de Arquitectos y Municipalidad de Rosario o alrededores.
-          </p>
-          <p>
-            Nuestro trabajo garantiza un seguimiento cercano y la correcta presentación de cada etapa administrativa.
-          </p>
-        </div>
+          <div className="mt-8 space-y-5 text-base leading-relaxed text-neutral-700 sm:text-lg">
+            <p>
+              Realizamos la gestion tecnica y documental necesaria para regularizar construcciones existentes ante los organismos municipales.
+            </p>
+            <p>
+              Incluye relevamiento, planos conforme a obra y tramites en el Colegio de Arquitectos y Municipalidad de Rosario o alrededores.
+            </p>
+            <p>
+              Nuestro trabajo garantiza un seguimiento cercano y la correcta presentacion de cada etapa administrativa.
+            </p>
+          </div>
 
-        <Link
-          href="/contacto"
-          className="mt-12 inline-flex items-center justify-center rounded-full bg-[#1b4332] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1b4332]/25 transition hover:-translate-y-1 hover:bg-[#2d6a4f] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
-        >
-          Contactarse
-        </Link>
-      </motion.section>
-    </main>
+          <Link
+            href="/presupuesto"
+            className="mt-12 inline-flex items-center justify-center rounded-full bg-[#1b4332] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1b4332]/25 transition hover:-translate-y-1 hover:bg-[#2d6a4f] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
+          >
+            {/* FIX: Apuntar a la ruta de contacto existente hasta implementar /contacto. */}
+            Contactarse
+          </Link>
+        </motion.section>
+      </div>
+    </>
   );
 }

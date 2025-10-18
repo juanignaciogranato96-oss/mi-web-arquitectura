@@ -9,11 +9,12 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
 const HERO_VIDEOS = ["/videos/hero.mp4", "/videos/hero_2.mp4"] as const;
-const OVERLAY_BASE_CLASS = "bg-black/40";
+const OVERLAY_BASE_CLASS = "bg-black/18";
 const FADE_DURATION_MS = 600;
 const HERO_ONE_MAX_TIME = 7; // seconds
 
@@ -42,6 +43,8 @@ export default function Hero({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const hasSubtitle = subtitle.trim().length > 0;
+  const prefersReducedMotion = useReducedMotion();
+  const animationsEnabled = !prefersReducedMotion;
 
   const videos = useMemo(() => HERO_VIDEOS, []);
 
@@ -174,73 +177,136 @@ export default function Hero({
     }
   };
 
-  return (
-    <section className="relative flex w-full items-center justify-center overflow-hidden bg-black text-center text-white min-h-[520px] sm:min-h-[600px] lg:min-h-[720px]">
-      {videos.map((videoSrc, index) => (
-        <video
-          key={videoSrc}
-          ref={(element) => {
-            videoRefs.current[index] = element;
-          }}
-          src={videoSrc}
-          muted
-          playsInline
-          preload="auto"
-          onEnded={() => handleVideoEnd(index)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity ease-linear ${
-            index === activeIndex ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ transitionDuration: `${FADE_DURATION_MS}ms` }}
-        />
-      ))}
+  const containerVariants = {
+    hidden: { opacity: 0, y: 48 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.9, ease: "easeOut", staggerChildren: 0.12 },
+    },
+  };
 
+  const elementVariants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, ease: "easeOut" },
+    },
+  };
+
+  return (
+    <section
+      className="relative flex min-h-[720px] w-full items-center justify-center overflow-hidden bg-black text-center text-white sm:min-h-[860px] lg:min-h-[1040px]"
+      data-scroll-section
+    >
       <div
-        className={`absolute inset-0 ${OVERLAY_BASE_CLASS} transition-opacity duration-500 ${
-          isTransitioning ? "opacity-80" : "opacity-100"
-        }`}
-      />
+        className="absolute inset-0 -translate-y-10 transform-gpu sm:-translate-y-12 lg:-translate-y-16"
+        data-scroll
+        data-scroll-speed="-0.45"
+        data-scroll-target="#hero"
+      >
+        {videos.map((videoSrc, index) => (
+          <video
+            key={videoSrc}
+            ref={(element) => {
+              videoRefs.current[index] = element;
+            }}
+            src={videoSrc}
+            muted
+            playsInline
+            preload="auto"
+            poster="/images/hero.webp"
+            onEnded={() => handleVideoEnd(index)}
+            className={`absolute inset-0 h-full w-full scale-[1.1] transform-gpu object-cover transition-opacity ease-linear ${
+              index === activeIndex ? "opacity-100" : "opacity-0"
+            }`}
+            style={{ transitionDuration: `${FADE_DURATION_MS}ms` }}
+          />
+        ))}
+
+        <div
+          className={`absolute inset-0 ${OVERLAY_BASE_CLASS} transition-opacity duration-500 ${
+            isTransitioning ? "opacity-80" : "opacity-100"
+          }`}
+        />
+      </div>
+
+      {/* FIX: Alinear lineas decorativas al borde superior e inferior del Hero. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] flex justify-center">
+        <div className="h-[2px] w-full bg-gradient-to-r from-cyan-400/0 via-cyan-300/70 to-cyan-400/0 shadow-[0_0_16px_rgba(94,234,212,0.38)]" />
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] flex justify-center">
+        <div className="h-[2px] w-full bg-gradient-to-r from-cyan-400/0 via-cyan-300/70 to-cyan-400/0 shadow-[0_0_16px_rgba(94,234,212,0.38)]" />
+      </div>
 
       <motion.div
-        className="relative z-10 w-full max-w-screen-lg px-4 py-12 sm:px-6 sm:py-16 md:px-8 md:py-20"
-        initial={{ opacity: 0, y: 36 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
+        id="hero"
+        className="relative z-10 w-full max-w-screen-xl px-4 py-10 sm:px-6 sm:py-12 md:px-8 md:py-14"
+        variants={animationsEnabled ? containerVariants : undefined}
+        initial={animationsEnabled ? "hidden" : undefined}
+        animate={animationsEnabled ? "visible" : undefined}
       >
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/80 sm:text-sm">
+        <motion.h2
+          className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/80 sm:text-sm"
+          variants={animationsEnabled ? elementVariants : undefined}
+        >
           {badge}
-        </h2>
-        <h1 className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
+        </motion.h2>
+        <motion.h1
+          className="text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl lg:text-6xl"
+          variants={animationsEnabled ? elementVariants : undefined}
+        >
           {title}
-        </h1>
+        </motion.h1>
         {hasSubtitle ? (
-          <p className="mt-4 text-base text-neutral-200 sm:text-lg md:text-xl">
+          <motion.p
+            className="mt-4 text-base text-neutral-200 sm:text-lg md:text-xl"
+            variants={animationsEnabled ? elementVariants : undefined}
+          >
             {subtitle}
-          </p>
+          </motion.p>
         ) : null}
-        <div className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
-          <a
+        <motion.div
+          className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
+          variants={animationsEnabled ? elementVariants : undefined}
+        >
+          <motion.a
             href="#projects"
             onClick={handleProjectsClick}
-            className="w-full rounded-full bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-200 sm:w-auto sm:px-6 sm:py-3"
+            className="group w-full rounded-full bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition-colors sm:w-auto sm:px-6 sm:py-3"
+            whileHover={animationsEnabled ? { y: -4 } : undefined}
+            whileTap={animationsEnabled ? { scale: 0.98 } : undefined}
           >
-            {buttons.projects}
-          </a>
-          <Link
-            href="/presupuesto"
-            className="w-full rounded-full bg-neutral-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-700 sm:w-auto sm:px-6 sm:py-3"
+            <span className="inline-flex items-center gap-2">
+              {buttons.projects}
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </span>
+          </motion.a>
+          <motion.div
+            whileHover={animationsEnabled ? { y: -4 } : undefined}
+            whileTap={animationsEnabled ? { scale: 0.98 } : undefined}
+            className="w-full sm:w-auto"
           >
-            {buttons.quote}
-          </Link>
-          <a
+            <Link
+              href="/presupuesto"
+              className="inline-flex w-full items-center justify-center rounded-full bg-neutral-900/90 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800 sm:w-auto sm:px-6 sm:py-3"
+            >
+              {buttons.quote}
+            </Link>
+          </motion.div>
+          <motion.a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#1b4332]/30 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f] sm:w-auto sm:px-6 sm:py-3"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#1b4332]/30 transition sm:w-auto sm:px-6 sm:py-3"
+            whileHover={animationsEnabled ? { scale: 1.05, y: -6 } : undefined}
+            whileTap={animationsEnabled ? { scale: 0.98 } : undefined}
           >
             <FaWhatsapp className="h-4 w-4" aria-hidden />
             <span>{buttons.whatsapp}</span>
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </motion.div>
     </section>
   );

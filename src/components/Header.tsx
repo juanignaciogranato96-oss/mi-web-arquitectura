@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FaWhatsapp } from "react-icons/fa";
@@ -31,6 +31,18 @@ export function Header({
   whatsappUrl,
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const MOBILE_MENU_ID = "mobile-navigation";
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleProjectsClick = () => {
     onProjectsClick();
@@ -104,6 +116,7 @@ export function Header({
             onClick={() => setIsMenuOpen((prev) => !prev)}
             className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-white hover:bg-white/10 lg:hidden"
             aria-expanded={isMenuOpen}
+            aria-controls={MOBILE_MENU_ID}
             aria-label="Abrir menu de navegacion"
           >
             {isMenuOpen ? (
@@ -116,7 +129,7 @@ export function Header({
       </div>
 
       {isMenuOpen ? (
-        <div className="lg:hidden">
+        <div className="lg:hidden" id={MOBILE_MENU_ID}>
           <div className="mx-auto mt-3 w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
             <div className="rounded-3xl border border-white/15 bg-[#0a0a0a]/95 p-6 shadow-xl shadow-black/40">
               <nav className="flex flex-col gap-4">

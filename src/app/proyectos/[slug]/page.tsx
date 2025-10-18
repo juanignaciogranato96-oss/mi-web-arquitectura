@@ -1,7 +1,9 @@
 import { promises as fs } from "fs";
 import path from "path";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { proyectos } from "@/data/proyectos";
 import ProjectGallery from "@/components/ProjectGallery";
 
@@ -82,54 +84,94 @@ async function getProjectImages(slug: string) {
   return getImagesFromFs(slug);
 }
 
-export default async function ProyectoPage({ params }: ProyectoPageProps) {
-  const proyecto = proyectos.find((item) => item.slug === params.slug);
+// FIX: Generar metadatos por proyecto para SEO y compartir en redes.
+export async function generateMetadata({
+  params,
+}: ProyectoPageProps): Promise<Metadata> {
+  const project = proyectos.find((item) => item.slug === params.slug);
 
-  if (!proyecto) {
-    notFound();
+  if (!project) {
+    return {
+      title: "Proyecto no disponible | J.G. Visual Estudio",
+      description: "El proyecto solicitado no existe o fue archivado.",
+      robots: { index: false, follow: false },
+    };
   }
 
-  const dynamicImages = await getProjectImages(proyecto.slug);
+  const title = `${project.nombre} | Portafolio - J.G. Visual Estudio`;
+  const description =
+    project.descripcion.slice(0, 155) || "Proyecto destacado del estudio.";
+  const previewImage = project.portada ?? project.imagenes?.[0];
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/proyectos/${project.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url: `/proyectos/${project.slug}`,
+      images: previewImage
+        ? [
+            {
+              url: previewImage,
+              alt: `${project.nombre} render`,
+            },
+          ]
+        : undefined,
+    },
+  };
+}
+
+export default async function ProyectoPage({ params }: ProyectoPageProps) {
+  const project =
+    proyectos.find((item) => item.slug === params.slug) ?? notFound();
+
+  const dynamicImages = await getProjectImages(project.slug);
   const galleryImages =
-    dynamicImages.length > 0 ? dynamicImages : proyecto.imagenes ?? [];
+    dynamicImages.length > 0 ? dynamicImages : project.imagenes ?? [];
   const showPlaceholder = galleryImages.length === 0;
 
   return (
     <section className="mx-auto max-w-5xl px-4 py-20 md:px-0 lg:py-24">
+      {/* FIX: Normalizar iconos y copy accesible para navegacion. */}
       <Link
         href="/"
         className="inline-flex items-center gap-2 text-sm font-medium text-[#1b4332] transition hover:text-[#2d6a4f]"
       >
-        <span aria-hidden="true">←</span>
+        <ArrowLeft className="h-4 w-4" aria-hidden />
         Volver al inicio
       </Link>
 
       <h1 className="mt-6 text-4xl font-bold text-neutral-900">
-        {proyecto.nombre}
+        {project.nombre}
       </h1>
       <p className="mt-2 text-sm font-semibold uppercase tracking-[0.35em] text-[#1b4332]">
-        {proyecto.tipo}
+        {project.tipo}
       </p>
       <p className="mt-8 text-lg leading-relaxed text-neutral-700">
-        {proyecto.descripcion}
+        {project.descripcion}
       </p>
 
       <h2 className="mt-12 text-2xl font-semibold text-neutral-900">
         Contexto y objetivo del proyecto
       </h2>
       <p className="mt-4 leading-relaxed text-neutral-700">
-        Este trabajo se desarrolló junto al cliente para potenciar la intención
-        arquitectónica, cuidando la lectura de materiales, la incidencia de la
+        Este trabajo se desarrollo junto al cliente para potenciar la intencion
+        arquitectonica, cuidando la lectura de materiales, la incidencia de la
         luz y la experiencia espacial en cada imagen generada.
       </p>
 
       {showPlaceholder ? (
         <p className="mt-12 rounded-xl border border-dashed border-neutral-300 p-8 text-center text-neutral-500">
-          Imágenes en preparación.
+          Imagenes en preparacion.
         </p>
       ) : (
         <div className="mt-12">
-          <ProjectGallery images={galleryImages} projectName={proyecto.nombre} />
+          <ProjectGallery images={galleryImages} projectName={project.nombre} />
         </div>
       )}
 
@@ -138,7 +180,7 @@ export default async function ProyectoPage({ params }: ProyectoPageProps) {
           href="/"
           className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#2d6a4f]"
         >
-          <span aria-hidden="true">←</span>
+          <ArrowLeft className="h-4 w-4" aria-hidden />
           Volver al inicio
         </Link>
       </div>

@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowDownRight, Sparkles } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -22,6 +23,7 @@ import { proyectos } from "@/data/proyectos";
 import type { Proyecto } from "@/data/proyectos";
 import type { LocaleKey } from "@/locales";
 import { getCopy } from "@/locales";
+import { useSmoothScroll } from "@/components/SmoothScrollProvider";
 
 type ProjectCategory = "commercial" | "residential";
 
@@ -104,8 +106,13 @@ function ProjectCard({
       className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1b4332]/60"
     >
       <motion.figure
-        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-neutral-900/15"
+        className="group flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-2xl hover:shadow-neutral-900/15"
         variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        whileHover={{ y: -12 }}
+        viewport={{ once: true, amount: 0.35 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="relative h-64 w-full overflow-hidden rounded-2xl sm:h-72 lg:h-80">
           <Image
@@ -144,9 +151,11 @@ function ProjectCard({
 }
 
 export default function HomePage() {
+  const { scroll } = useSmoothScroll();
   const [language, setLanguage] = useState<LocaleKey>("es");
   const copy = getCopy(language);
   const [approachSlideIndex, setApproachSlideIndex] = useState(0);
+  const [isLoaderVisible, setIsLoaderVisible] = useState(true);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -157,6 +166,19 @@ export default function HomePage() {
       setLanguage(storedLanguage);
     }
   }, [setLanguage]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (motionQuery.matches) {
+      setIsLoaderVisible(false);
+      return;
+    }
+    const timeout = window.setTimeout(() => setIsLoaderVisible(false), 1300);
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -202,7 +224,10 @@ export default function HomePage() {
       };
     });
   }, [copy.projects.items, copy.projects.categories]);
-  const approachHighlights = copy.approach.highlights ?? [];
+  const approachHighlights = useMemo(
+    () => copy.approach.highlights ?? [],
+    [copy.approach.highlights],
+  );
   const approachSlides = useMemo(
     () => {
       const baseSlides = [
@@ -268,11 +293,16 @@ export default function HomePage() {
       : copy.approach.quote;
 
   const handleProjectsClick = useCallback(() => {
-    const target = document.getElementById("projects");
-    if (target) {
+    const target = document.querySelector<HTMLElement>("#projects");
+    if (!target) {
+      return;
+    }
+    if (scroll) {
+      scroll.scrollTo(target, { offset: -120, duration: 800 });
+    } else {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, []);
+  }, [scroll]);
 
   useEffect(() => {
     setApproachSlideIndex(0);
@@ -280,6 +310,29 @@ export default function HomePage() {
 
   return (
     <>
+      <AnimatePresence>
+        {isLoaderVisible ? (
+          <motion.div
+            key="loader"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a0a] text-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="flex items-center gap-3 rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.35em] sm:text-sm"
+            >
+              <span className="inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-[#C2A85F]" />
+              JG Visual Estudio
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
       <Header
         labels={copy.header}
         language={language}
@@ -288,7 +341,8 @@ export default function HomePage() {
         whatsappUrl={WHATSAPP_URL}
       />
 
-      <main className="bg-white pt-20 text-neutral-900 sm:pt-24">
+      {/* FIX: Sustituir main anidado por contenedor div para mantener una sola region principal. */}
+      <div className="bg-white pt-20 text-neutral-900 sm:pt-24">
         <Hero
           badge={copy.hero.badge}
           title={copy.hero.title}
@@ -299,6 +353,7 @@ export default function HomePage() {
         />
 
         <motion.section
+          data-scroll-section
           className="mx-auto w-full max-w-screen-xl px-4 py-12 sm:px-6 sm:py-16 md:px-8 md:py-20"
           variants={sectionVariants}
           initial="hidden"
@@ -306,8 +361,9 @@ export default function HomePage() {
           viewport={{ once: true, amount: 0.2 }}
         >
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#C2A85F] sm:text-sm">
-              {copy.services.title}
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase text-[#C2A85F] sm:text-sm">
+              <Sparkles className="h-4 w-4 shrink-0" aria-hidden />
+              <span className="tracking-[0.35em]">{copy.services.title}</span>
             </p>
             <h2 className="mt-4 text-3xl font-semibold sm:text-4xl md:text-5xl">
               {copy.services.subtitle}
@@ -352,6 +408,7 @@ export default function HomePage() {
         </motion.section>
 
         <motion.section
+          data-scroll-section
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
@@ -362,6 +419,7 @@ export default function HomePage() {
 
         <motion.section
           id="projects"
+          data-scroll-section
           className="bg-[#f5f5f5] py-12 sm:py-16 md:py-20"
           variants={sectionVariants}
           initial="hidden"
@@ -404,13 +462,14 @@ export default function HomePage() {
         </motion.section>
 
         <motion.section
+          data-scroll-section
           className="bg-[#f7f7f7] py-12 sm:py-16 md:py-20"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <div className="mx-auto grid w-full max-w-screen-xl items-center gap-10 px-4 sm:px-6 md:px-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="mx-auto grid w-full max-w-screen-xl items-center gap-12 px-4 sm:px-6 sm:gap-14 md:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
             <motion.div
               className="w-full"
               variants={sectionVariants}
@@ -418,23 +477,23 @@ export default function HomePage() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b4332] sm:text-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#1b4332] sm:text-sm">
                 {copy.approach.title}
               </p>
-              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl md:text-5xl">
+              <h2 className="mt-4 text-2xl font-semibold sm:text-4xl md:text-5xl">
                 {copy.approach.heading}
               </h2>
-              <div className="mt-6 rounded-3xl border border-neutral-300/60 bg-white/85 p-6 shadow-sm shadow-neutral-900/5 sm:p-8">
+              <div className="mt-6 rounded-3xl border border-neutral-300/60 bg-white/90 p-5 shadow-sm shadow-neutral-900/5 sm:p-8">
                 <motion.p
                   key={currentApproachMessage}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="text-base font-light italic text-neutral-600 sm:text-lg"
+                  className="text-sm font-light italic text-neutral-600 sm:text-base"
                 >
                   &ldquo;{currentApproachMessage}&rdquo;
                 </motion.p>
-                <div className="mt-6 text-sm text-neutral-500 sm:text-base">
+                <div className="mt-5 text-sm text-neutral-500 sm:text-base">
                   <p className="font-semibold text-neutral-900">
                     {copy.approach.author}
                   </p>
@@ -446,7 +505,7 @@ export default function HomePage() {
               className="flex w-full justify-center lg:justify-end"
               variants={sectionVariants}
             >
-              <div className="w-full max-w-xl">
+              <div className="w-full max-w-sm sm:max-w-lg lg:max-w-xl">
                 <Swiper
                   modules={[Autoplay, Pagination]}
                   slidesPerView={1}
@@ -462,16 +521,16 @@ export default function HomePage() {
                   pagination={{ clickable: true }}
                   className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg shadow-neutral-900/10"
                 >
-                  {approachSlides.map((slide) => (
+                  {approachSlides.map((slide, index) => (
                     <SwiperSlide key={slide.src}>
-                      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl">
+                      <div className="relative aspect-[5/6] w-full overflow-hidden rounded-2xl sm:aspect-[4/5]">
                         <Image
                           src={slide.src}
                           alt={`Juan Granato - ${slide.message || copy.approach.title}`}
                           fill
                           sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 100vw"
                           className={`h-full w-full rounded-2xl object-cover ${slide.className ?? ""}`}
-                          priority={slide.priority}
+                          priority={index === 0}
                         />
                       </div>
                     </SwiperSlide>
@@ -482,9 +541,12 @@ export default function HomePage() {
           </div>
         </motion.section>
 
-        <Testimonios />
+        <div data-scroll-section>
+          <Testimonios />
+        </div>
 
         <motion.section
+          data-scroll-section
           className="relative overflow-hidden bg-[#0a0a0a] py-12 sm:py-16 md:py-20"
           variants={sectionVariants}
           initial="hidden"
@@ -499,15 +561,18 @@ export default function HomePage() {
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/presupuesto"
-                className="inline-flex w-full items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#0a0a0a] shadow-lg shadow-black/25 transition hover:-translate-y-1 hover:bg-neutral-200 sm:w-auto sm:px-6 sm:py-3"
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#0a0a0a] shadow-lg shadow-black/25 transition hover:-translate-y-1 hover:bg-neutral-200 sm:w-auto sm:px-6 sm:py-3"
               >
-                {copy.cta.button}
+                <span>{copy.cta.button}</span>
+                <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </Link>
             </div>
           </div>
         </motion.section>
-      </main>
-      <Footer labels={copy.footer} />
+      </div>
+      <div data-scroll-section>
+        <Footer labels={copy.footer} />
+      </div>
     </>
   );
 }
