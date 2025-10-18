@@ -22,6 +22,11 @@ type HeaderProps = {
   whatsappUrl: string;
 };
 
+const GLASS_HEADER =
+  "bg-white/85 backdrop-blur-2xl border-b border-white/40 shadow-lg shadow-neutral-900/5";
+const GLASS_PANEL =
+  "bg-white/90 backdrop-blur-xl border border-white/40 shadow-xl shadow-neutral-900/10";
+
 export function Header({
   labels,
   language,
@@ -54,11 +59,11 @@ export function Header({
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0a0a0a]/70 backdrop-blur-md">
-      <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
+    <header className={`fixed inset-x-0 top-0 z-50 ${GLASS_HEADER}`}>
+      <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="text-sm font-semibold uppercase tracking-[0.35em] text-white sm:text-base"
+          className="text-sm font-semibold uppercase tracking-[0.35em] text-[#0a0a0a] sm:text-base"
           aria-label={labels.logo}
         >
           {labels.logo}
@@ -68,13 +73,13 @@ export function Header({
           <button
             type="button"
             onClick={handleProjectsClick}
-            className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:border-white hover:bg-white/10"
+            className="rounded-full border border-neutral-900/15 bg-white/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition hover:bg-white/80"
           >
             {labels.projects}
           </button>
           <Link
             href="/presupuesto"
-            className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:border-white hover:bg-white/10"
+            className="rounded-full border border-neutral-900/15 bg-white/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition hover:bg-white/80"
           >
             {labels.quote}
           </Link>
@@ -82,7 +87,7 @@ export function Header({
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-black/20 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f]"
+            className="inline-flex items-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#1b4332]/30 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f]"
           >
             <FaWhatsapp className="h-3.5 w-3.5" aria-hidden />
             <span>{labels.whatsapp}</span>
@@ -90,7 +95,7 @@ export function Header({
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
+          <div className="flex items-center gap-2 rounded-full border border-neutral-900/15 bg-white/60 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#0a0a0a] shadow-sm">
             {SUPPORTED_LOCALES.map((option) => {
               const isActive = option === language;
               return (
@@ -100,8 +105,8 @@ export function Header({
                   onClick={() => handleLanguageChange(option)}
                   className={`rounded-full px-2.5 py-1 transition ${
                     isActive
-                      ? "bg-white text-black"
-                      : "text-white/60 hover:text-white"
+                      ? "bg-[#0a0a0a] text-white shadow"
+                      : "text-neutral-700 hover:text-neutral-900"
                   }`}
                   aria-pressed={isActive}
                 >
@@ -113,7 +118,7 @@ export function Header({
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-white hover:bg-white/10 lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-neutral-900/15 bg-white/70 text-neutral-900 transition hover:bg-white lg:hidden"
             aria-expanded={isMenuOpen}
             aria-controls={MOBILE_MENU_ID}
             aria-label="Abrir menu de navegacion"
@@ -130,19 +135,19 @@ export function Header({
       {isMenuOpen ? (
         <div className="lg:hidden" id={MOBILE_MENU_ID}>
           <div className="mx-auto mt-3 w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
-            <div className="rounded-3xl border border-white/15 bg-[#0a0a0a]/95 p-6 shadow-xl shadow-black/40">
+            <div className={`rounded-3xl p-6 ${GLASS_PANEL}`}>
               <nav className="flex flex-col gap-4">
                 <button
                   type="button"
                   onClick={handleProjectsClick}
-                  className="w-full rounded-full border border-white/20 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:border-white hover:bg-white/10 sm:px-6 sm:py-3"
+                  className="w-full rounded-full border border-neutral-900/15 bg-white/40 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition hover:bg-white/80 sm:px-6 sm:py-3"
                 >
                   {labels.projects}
                 </button>
                 <Link
                   href="/presupuesto"
                   onClick={() => setIsMenuOpen(false)}
-                  className="w-full rounded-full border border-white/20 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:border-white hover:bg-white/10 sm:px-6 sm:py-3"
+                  className="w-full rounded-full border border-neutral-900/15 bg-white/40 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition hover:bg-white/80 sm:px-6 sm:py-3"
                 >
                   {labels.quote}
                 </Link>
@@ -151,7 +156,7 @@ export function Header({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsMenuOpen(false)}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-black/20 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f] sm:px-6 sm:py-3"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#1b4332] px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-[#1b4332]/30 transition-transform transition-colors hover:-translate-y-0.5 hover:scale-105 hover:bg-[#2d6a4f] sm:px-6 sm:py-3"
                 >
                   <FaWhatsapp className="h-4 w-4" aria-hidden />
                   <span>{labels.whatsapp}</span>
